@@ -14,6 +14,7 @@
         <module>GenshinModel-client</module>
         <module>GenshinModel-service</module>
         <module>GenshinModel-web</module>
+        <module>GenshinModel-data</module>
     </modules>
 
     <properties>
