@@ -1,5 +1,10 @@
 # 原神计算模型
 ## TODO
+* GenshinModel-data引入基础数据读取类[Snap.Metadata](https://github.com/DGP-Studio/Snap.Metadata)
+    * 定时刷新数据
+    * JSON转POJO
 * 引入数据模型
 * 构建面板计算逻辑
 * 构建面板计算Effect
+## COMPLETE
+* 搭建基础模型
