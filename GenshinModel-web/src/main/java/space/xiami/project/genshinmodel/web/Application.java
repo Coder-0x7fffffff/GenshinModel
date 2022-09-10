@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(value = "space.xiami.projects.genshinimpacttool")
+@ComponentScan(value = "space.xiami.project.genshinmodel")
 public class Application {
 
     public static void main(String[] args) {

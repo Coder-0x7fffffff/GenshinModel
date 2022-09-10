@@ -1,15 +1,9 @@
 package space.xiami.project.genshinmodel.common.entry.attributes;
 
 import space.xiami.project.genshinmodel.common.entry.Entry;
-import space.xiami.project.common.entry.attributes.advancedstats.*;
-import space.xiami.project.common.entry.attributes.basestats.*;
-import space.xiami.project.common.entry.attributes.elementaltype.*;
 import space.xiami.project.genshinmodel.common.entry.attributes.advancedstats.*;
 import space.xiami.project.genshinmodel.common.entry.attributes.basestats.*;
 import space.xiami.project.genshinmodel.common.entry.attributes.elementaltype.*;
-import space.xiami.project.genshinmodel.entry.attributes.advancedstats.*;
-import space.xiami.project.genshinmodel.entry.attributes.basestats.*;
-import space.xiami.project.genshinmodel.entry.attributes.elementaltype.*;
 import space.xiami.project.genshinmodel.common.exception.EntryException;
 
 import java.lang.reflect.Field;
