@@ -1,4 +1,4 @@
-package space.xiami.project.genshinmodel.client.factory;
+package space.xiami.project.genshinmodel.factory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

@@ -1,11 +1,11 @@
 package space.xiami.project.genshinmodel.domain.effect;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
 
 public interface Effect {
 
-    Character character();
+    Avatar avatar();
 
     void onCalculateAttribute(CalculateAttributeContext context);
 }

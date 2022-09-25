@@ -1,24 +1,27 @@
 package space.xiami.project.genshinmodel.domain.context;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.common.entry.attributes.Attributes;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public class CalculateAttributeContext extends AbstractContext<CalculateAttributeResult> {
 
     private List<Integer> realTimeHP;
 
     private List<Attributes> realTimeAttributes;
 
-    public CalculateAttributeContext(List<Character> characters) {
-        super(characters);
+    public CalculateAttributeContext(List<Avatar> avatars) {
+        super(avatars);
     }
 
     @Override
     public CalculateAttributeResult buildResult() {
         CalculateAttributeResult result = new CalculateAttributeResult();
-        result.setCharacters(getCharacters());
+        result.setAvatars(getAvatars());
         result.setRealTimeHP(realTimeHP);
         result.setRealTimeAttributes(realTimeAttributes);
         return result;

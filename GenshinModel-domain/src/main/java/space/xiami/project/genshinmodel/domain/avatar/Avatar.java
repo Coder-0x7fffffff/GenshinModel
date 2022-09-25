@@ -1,11 +1,14 @@
-package space.xiami.project.genshinmodel.domain.character;
+package space.xiami.project.genshinmodel.domain.avatar;
 
 import space.xiami.project.genshinmodel.common.entry.attributes.Attributes;
 import space.xiami.project.genshinmodel.domain.equipment.Equipment;
 
 import java.util.List;
 
-public class Character {
+/**
+ * @author Xiami
+ */
+public class Avatar {
 
     //角色基础信息
     /**

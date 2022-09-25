@@ -1,4 +1,4 @@
-package space.xiami.project.genshinmodel.client.executor;
+package space.xiami.project.genshinmodel.executor;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshinmodel.domain.context.Context;

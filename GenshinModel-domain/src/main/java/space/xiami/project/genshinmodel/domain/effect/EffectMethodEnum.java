@@ -4,6 +4,10 @@ import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext
 
 import java.lang.reflect.Method;
 
+/**
+ * @author Xiami
+ */
+
 public enum EffectMethodEnum {
 
     CALCULATE_ATTRIBUTE("CalculateAttribute", getMethod("onCalculateAttribute", CalculateAttributeContext.class));

@@ -1,27 +1,30 @@
 package space.xiami.project.genshinmodel.domain.context;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
 
 import java.util.List;
 
 
+/**
+ * @author Xiami
+ */
 public abstract class AbstractContext<Result> implements Context<Result>{
 
-    private List<Character> characters;
+    private List<Avatar> avatars;
 
-    public AbstractContext(List<Character> characters){
-        this.characters = characters;
+    public AbstractContext(List<Avatar> avatars){
+        this.avatars = avatars;
     }
 
     @Override
-    public List<Character> getCharacters() {
-        return characters;
+    public List<Avatar> getAvatars() {
+        return avatars;
     }
 
     @Override
-    public void setCharacters(List<Character> characters) {
-        this.characters = characters;
+    public void setAvatars(List<Avatar> avatars) {
+        this.avatars = avatars;
     }
 
     @Override

@@ -1,21 +1,24 @@
 package space.xiami.project.genshinmodel.domain.effect;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
 
+/**
+ * @author Xiami
+ */
 public abstract class AbstractEffect implements Effect{
 
-    private Character character;
+    private Avatar avatar;
 
     public AbstractEffect(){}
 
-    public AbstractEffect(Character character){
-        this.character = character;
+    public AbstractEffect(Avatar avatar){
+        this.avatar = avatar;
     }
 
     @Override
-    public Character character() {
-        return character;
+    public Avatar avatar() {
+        return avatar;
     }
 
     @Override

@@ -1,12 +1,12 @@
-package space.xiami.project.genshinmodel.client.manager;
+package space.xiami.project.genshinmodel.manager;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeResult;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
 import space.xiami.project.genshinmodel.domain.effect.EffectMethodEnum;
-import space.xiami.project.genshinmodel.client.executor.DefaultEffectExecutor;
-import space.xiami.project.genshinmodel.client.util.CharacterUtils;
+import space.xiami.project.genshinmodel.executor.DefaultEffectExecutor;
+import space.xiami.project.genshinmodel.util.AvatarUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,7 +23,7 @@ public class CalculateManager {
 
 
         // 执行所有effect
-        List<Effect> effects = CharacterUtils.getAllEffects(context.getCharacters());
+        List<Effect> effects = AvatarUtils.getAllEffects(context.getAvatars());
         return defaultEffectExecutor.execute(effects, context, EffectMethodEnum.CALCULATE_ATTRIBUTE);
     }
 }

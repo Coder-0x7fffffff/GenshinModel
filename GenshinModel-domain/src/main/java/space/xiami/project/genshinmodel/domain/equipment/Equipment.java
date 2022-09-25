@@ -5,6 +5,9 @@ import space.xiami.project.genshinmodel.domain.effect.Effect;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public interface Equipment {
 
     String getName();

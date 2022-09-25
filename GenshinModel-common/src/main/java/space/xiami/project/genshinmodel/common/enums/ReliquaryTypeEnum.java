@@ -1,6 +1,6 @@
 package space.xiami.project.genshinmodel.common.enums;
 
-public enum ArtifactTypeEnum {
+public enum ReliquaryTypeEnum {
 
     FLOWER_OF_LIFE((byte) 0, "FlowerOfLife"),
     PLUME_OF_DEATH((byte) 1, "PlumeOfDeath"),
@@ -11,7 +11,7 @@ public enum ArtifactTypeEnum {
     private final byte code;
     private final String desc;
 
-    ArtifactTypeEnum(byte code, String desc) {
+    ReliquaryTypeEnum(byte code, String desc) {
         this.code = code;
         this.desc = desc;
     }

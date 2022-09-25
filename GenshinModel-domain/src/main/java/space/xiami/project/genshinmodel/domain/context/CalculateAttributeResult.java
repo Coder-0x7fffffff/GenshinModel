@@ -1,24 +1,27 @@
 package space.xiami.project.genshinmodel.domain.context;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.common.entry.attributes.Attributes;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public class CalculateAttributeResult {
 
-    private List<Character> characters;
+    private List<Avatar> avatars;
 
     private List<Integer> realTimeHP;
 
     private List<Attributes> realTimeAttributes;
 
-    public List<Character> getCharacters() {
-        return characters;
+    public List<Avatar> getAvatars() {
+        return avatars;
     }
 
-    public void setCharacters(List<Character> characters) {
-        this.characters = characters;
+    public void setAvatars(List<Avatar> avatars) {
+        this.avatars = avatars;
     }
 
     public List<Integer> getRealTimeHP() {
