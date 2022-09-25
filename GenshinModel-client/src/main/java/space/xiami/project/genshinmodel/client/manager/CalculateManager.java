@@ -18,6 +18,11 @@ public class CalculateManager {
     private DefaultEffectExecutor defaultEffectExecutor;
 
     public CalculateAttributeResult calculateAttribute(CalculateAttributeContext context) {
+
+        // 累加所有装备属性
+
+
+        // 执行所有effect
         List<Effect> effects = CharacterUtils.getAllEffects(context.getCharacters());
         return defaultEffectExecutor.execute(effects, context, EffectMethodEnum.CALCULATE_ATTRIBUTE);
     }
