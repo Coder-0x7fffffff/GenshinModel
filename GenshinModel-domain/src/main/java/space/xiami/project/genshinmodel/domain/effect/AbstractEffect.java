@@ -1,8 +1,5 @@
 package space.xiami.project.genshinmodel.domain.effect;
 
-import space.xiami.project.genshinmodel.domain.avatar.Avatar;
-import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
-
 import java.util.List;
 
 /**
@@ -10,21 +7,15 @@ import java.util.List;
  */
 public abstract class AbstractEffect implements Effect{
 
-    private EquipAffix equipAffix;
+    private List<Affix> affixes;
 
-    public AbstractEffect(){}
-
-    public AbstractEffect(EquipAffix equipAffix){
-        this.equipAffix = equipAffix;
+    @Override
+    public List<Affix> getAffixes() {
+        return affixes;
     }
 
     @Override
-    public EquipAffix getEquipAffix() {
-        return equipAffix;
-    }
-
-    @Override
-    public void setEquipAffix(EquipAffix equipAffix) {
-        this.equipAffix = equipAffix;
+    public void setAffixes(List<Affix> affixes) {
+        this.affixes = affixes;
     }
 }

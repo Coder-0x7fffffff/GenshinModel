@@ -3,12 +3,12 @@ package space.xiami.project.genshinmodel.manager;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
-import space.xiami.project.genshinmodel.domain.effect.EquipAffix;
+import space.xiami.project.genshinmodel.domain.effect.weapon.WeaponAffix;
 import space.xiami.project.genshinmodel.domain.effect.weapon.WeaponEffect;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
-import space.xiami.project.genshinmodel.util.converter.ConverterUtils;
+import space.xiami.project.genshinmodel.util.converter.AffixConverter;
 import space.xiami.project.genshinmodel.util.converter.EffectConverter;
 import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
 import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
@@ -72,7 +72,7 @@ public class WeaponManager {
         for(space.xiami.project.genshindataviewer.domain.model.Weapon.WeaponEquipAffix weaponEquipAffix : from.getWeaponEquipAffixes()){
             if(weaponEquipAffix.getRefinementRank().equals(refinementRank)){
                 weaponEquipAffix.getEquipAffix().forEach(equipAffix -> {
-                    EquipAffix convertedAffix = ConverterUtils.convertEquipAffix(equipAffix);
+                    WeaponAffix convertedAffix = AffixConverter.convertEquipAffix(equipAffix);
                     WeaponEffect weaponEffect = EffectConverter.toWeaponEffect(to, convertedAffix);
                     effects.add(weaponEffect);
                 });

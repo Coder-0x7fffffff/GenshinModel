@@ -1,6 +1,6 @@
 package space.xiami.project.genshinmodel.domain.entry.attributes.basestats;
 
-import space.xiami.project.genshinmodel.domain.entry.AbstractEntry;
+import space.xiami.project.genshinmodel.domain.entry.attributes.AbstractAttribute;
 
-public class AbstractBaseStats extends AbstractEntry {
+public class AbstractBaseStats extends AbstractAttribute {
 }

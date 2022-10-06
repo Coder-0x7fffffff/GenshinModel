@@ -1,8 +1,11 @@
 package space.xiami.project.genshinmodel.rest;
 
+import javafx.util.Pair;
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import space.xiami.project.genshincommon.NumberRange;
 import space.xiami.project.genshincommon.exception.DataRestTemplateException;
 import space.xiami.project.genshindataviewer.domain.model.Avatar;
 import space.xiami.project.genshinmodel.manager.ConstantManager;
@@ -61,6 +64,22 @@ public class AvatarRestTemplate {
         return null;
     }
 
+    public Map<String, NumberRange<Integer>> getSkillLevelRangeById(Long id){
+        return getSkillLevelRange(getById(id));
+    }
+
+    public Map<String, NumberRange<Integer>> getSkillLevelRangeById(Long id, Byte lang){
+        return getSkillLevelRange(getById(id, lang));
+    }
+
+    public Map<String, NumberRange<Integer>> getSkillLevelRangeByName(String name){
+        return getSkillLevelRange(getByName(name));
+    }
+
+    public Map<String, NumberRange<Integer>> getSkillLevelRangeByName(String name, Byte lang){
+        return getSkillLevelRange(getByName(name, lang));
+    }
+
     public Map list() {
         return list(constantManager.getLanguageCode());
     }
@@ -74,5 +93,25 @@ public class AvatarRestTemplate {
             log.info("list error.", e);
         }
         return null;
+    }
+
+    private static Map<String, NumberRange<Integer>> getSkillLevelRange(Avatar avatar){
+        Map<String, NumberRange<Integer>> skillLevelRange = new ListOrderedMap<>();
+        if(avatar != null){
+            avatar.getSkillActive().values().forEach(activeSkills -> {
+                activeSkills.forEach(activeSkill -> {
+                    int minLevel = Integer.MAX_VALUE, maxLevel = Integer.MIN_VALUE;
+                    for(Avatar.Skill.SkillProperty skillProperty : activeSkill.getSkillProperties()){
+                        minLevel = Math.min(minLevel, skillProperty.getLevel());
+                        maxLevel = Math.max(maxLevel, skillProperty.getLevel());
+                    }
+                    skillLevelRange.put(
+                            activeSkill.getName(),
+                            new NumberRange<>(minLevel, maxLevel)
+                    );
+                });
+            });
+        }
+        return skillLevelRange;
     }
 }

@@ -1,7 +1,13 @@
 package space.xiami.project.genshinmodel.domain.avatar;
 
 import space.xiami.project.genshinmodel.domain.entry.attributes.Attributes;
+import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.equipment.Equipment;
+import space.xiami.project.genshinmodel.domain.equipment.reliquary.ReliquarySet;
+import space.xiami.project.genshinmodel.domain.equipment.skill.active.ActiveSkill;
+import space.xiami.project.genshinmodel.domain.equipment.skill.passive.PassiveSkill;
+import space.xiami.project.genshinmodel.domain.equipment.talent.Talent;
+import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 
 import java.util.List;
 
@@ -12,12 +18,18 @@ public class Avatar {
 
     //角色基础信息
     /**
+     * 唯一id
+     */
+    private Long id;
+
+    /**
      * 名称
      */
     private String name;
 
     /**
-     * 元素种类
+     * TODO 元素种类
+     * @see space.xiami.project.genshincommon.enums.ElementalTypeEnum
      */
     private Byte elementalType;
 
@@ -33,14 +45,42 @@ public class Avatar {
     private String level;
 
     /**
-     * 基础属性
+     * 角色属性
      */
-    private Attributes attributes;
+    private List<AbstractBonus> bonuses;
 
     /**
-     * 装备
+     * 武器
      */
-    private List<Equipment> equipments;
+    private List<Weapon> weapons;
+
+    /**
+     * 圣遗物
+     */
+    private List<ReliquarySet> reliquarySets;
+
+    /**
+     * 主动技能
+     */
+    private List<ActiveSkill> activeSkills;
+
+    /**
+     * 被动技能
+     */
+    private List<PassiveSkill> passiveSkills;
+
+    /**
+     * 命座
+     */
+    private List<Talent> talents;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -66,12 +106,12 @@ public class Avatar {
         this.weaponType = weaponType;
     }
 
-    public Attributes getAttributes() {
-        return attributes;
+    public List<AbstractBonus> getBonuses() {
+        return bonuses;
     }
 
-    public void setAttributes(Attributes attributes) {
-        this.attributes = attributes;
+    public void setBonuses(List<AbstractBonus> bonuses) {
+        this.bonuses = bonuses;
     }
 
     public String getLevel() {
@@ -82,11 +122,43 @@ public class Avatar {
         this.level = level;
     }
 
-    public List<Equipment> getEquipments() {
-        return equipments;
+    public List<Weapon> getWeapons() {
+        return weapons;
     }
 
-    public void setEquipments(List<Equipment> equipments) {
-        this.equipments = equipments;
+    public void setWeapons(List<Weapon> weapons) {
+        this.weapons = weapons;
+    }
+
+    public List<ReliquarySet> getReliquarySets() {
+        return reliquarySets;
+    }
+
+    public void setReliquarySets(List<ReliquarySet> reliquarySets) {
+        this.reliquarySets = reliquarySets;
+    }
+
+    public List<ActiveSkill> getActiveSkills() {
+        return activeSkills;
+    }
+
+    public void setActiveSkills(List<ActiveSkill> activeSkills) {
+        this.activeSkills = activeSkills;
+    }
+
+    public List<PassiveSkill> getPassiveSkills() {
+        return passiveSkills;
+    }
+
+    public void setPassiveSkills(List<PassiveSkill> passiveSkills) {
+        this.passiveSkills = passiveSkills;
+    }
+
+    public List<Talent> getTalents() {
+        return talents;
+    }
+
+    public void setTalents(List<Talent> talents) {
+        this.talents = talents;
     }
 }

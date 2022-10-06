@@ -1,10 +1,9 @@
 package space.xiami.project.genshinmodel.domain.effect.talent;
 
 import space.xiami.project.genshinmodel.domain.effect.AbstractEffect;
-import space.xiami.project.genshinmodel.domain.effect.EquipAffix;
 import space.xiami.project.genshinmodel.domain.equipment.talent.Talent;
 
-import java.util.List;
+import java.util.Collections;
 
 /**
  * @author Xiami
@@ -17,9 +16,9 @@ public class TalentEffect extends AbstractEffect {
         this.talent = talent;
     }
 
-    public TalentEffect(EquipAffix equipAffix, Talent talent) {
-        super(equipAffix);
+    public TalentEffect(Talent talent, TalentAffix talentAffix) {
         this.talent = talent;
+        setAffixes(Collections.singletonList(talentAffix));
     }
 
     public Talent talent() {

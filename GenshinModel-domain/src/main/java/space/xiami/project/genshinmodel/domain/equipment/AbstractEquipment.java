@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Xiami
  */
-public class AbstractEquipment implements Equipment{
+public class AbstractEquipment implements Equipment {
 
     private String name;
 

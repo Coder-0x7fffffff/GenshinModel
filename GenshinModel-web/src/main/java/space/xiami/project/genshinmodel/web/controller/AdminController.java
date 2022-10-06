@@ -2,15 +2,18 @@ package space.xiami.project.genshinmodel.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import space.xiami.project.genshincommon.NumberRange;
 import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshinmodel.client.CalculateService;
+import space.xiami.project.genshinmodel.manager.AvatarManager;
 import space.xiami.project.genshinmodel.manager.WeaponManager;
 import space.xiami.project.genshinmodel.rest.AvatarRestTemplate;
 import space.xiami.project.genshinmodel.rest.ReliquaryRestTemplate;
@@ -47,6 +50,9 @@ public class AdminController {
 
     @Resource
     private WeaponManager weaponManager;
+
+    @Resource
+    private AvatarManager avatarManager;
 
     @Value("${debug.password:coder0x7fffffff}")
     private String password;
@@ -182,15 +188,20 @@ public class AdminController {
                     // talent
                     int talentLen = avatar.getTalents().size();
                     for(int idx = 0; idx<talentLen; idx++){
-                        Avatar.Talent avatarTalent = avatar.getTalents().get(idx);
-                        Avatar.Talent langAvatarTalent = langAvatar.getTalents().get(idx);
-                        int addPropLen = avatarTalent.getAddProperties().size();
-                        for(int idx1 = 0; idx1<addPropLen; idx1++){
-                            String key = avatarTalent.getAddProperties().get(idx1).getPropType().replaceAll(" ", "");
-                            String val = langAvatarTalent.getAddProperties().get(idx1).getPropType();
-                            equipPropType.computeIfAbsent(key, v -> new HashSet<>())
-                                    .add(val);
-                        }
+                        avatar.getTalents().forEach((k, v) ->{
+                            int tLen = avatar.getTalents().get(k).size();
+                            for(int idx2 = 0; idx2<tLen; idx2++){
+                                Avatar.Talent avatarTalent = avatar.getTalents().get(k).get(idx2);
+                                Avatar.Talent langAvatarTalent = langAvatar.getTalents().get(k).get(idx2);
+                                int addPropLen = avatarTalent.getAddProperties().size();
+                                for(int idx1 = 0; idx1<addPropLen; idx1++){
+                                    String key = avatarTalent.getAddProperties().get(idx1).getPropType().replaceAll(" ", "");
+                                    String val = langAvatarTalent.getAddProperties().get(idx1).getPropType();
+                                    equipPropType.computeIfAbsent(key, g -> new HashSet<>())
+                                            .add(val);
+                                }
+                            }
+                        });
                     }
                 }
                 log.info("reliquaryID: {}, time: {}ms", id, System.currentTimeMillis() - start);
@@ -239,5 +250,39 @@ public class AdminController {
     @RequestMapping("/getWeaponByName")
     public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponByName(String name, String level, Integer rr){
         return weaponManager.getByName(name, level, rr);
+    }
+
+    @RequestMapping("/getAvatarById")
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(Long id, String level, Integer talentLevel, String sl){
+        Map<String, NumberRange<Integer>> skillLevelRange = avatarManager.getSkillLevelRangeById(id);
+        return avatarManager.getById(id, level, fillSkillLevelMap(sl, skillLevelRange), talentLevel);
+    }
+
+    @RequestMapping("/getAvatarByName")
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(String name, String level, Integer talentLevel, String sl){
+        Map<String, NumberRange<Integer>> skillLevelRange = avatarManager.getSkillLevelRangeByName(name);
+        return avatarManager.getByName(name, level, fillSkillLevelMap(sl, skillLevelRange), talentLevel);
+    }
+
+    @RequestMapping("/getAvatarSkillLevelRangeById")
+    public Map<String, NumberRange<Integer>> getAvatarSkillLevelRangeById(Long id){
+        return avatarManager.getSkillLevelRangeById(id);
+    }
+
+    @RequestMapping("/getAvatarSkillLevelRangeByName")
+    public Map<String, NumberRange<Integer>> getAvatarSkillLevelRangeByName(String name){
+        return avatarManager.getSkillLevelRangeByName(name);
+    }
+
+    private static Map<String, Integer> fillSkillLevelMap(String skillLevelStr, Map<String, NumberRange<Integer>> range){
+        String[] skillLevelStrArr = skillLevelStr.split("_");
+        Map<String, Integer> skillLevel = new HashMap<>();
+        List<String> keys = new ArrayList<>(range.keySet());
+        for(int idx = 0; idx<keys.size();idx++){
+            int level = skillLevelStrArr.length > idx ?
+                    Integer.parseInt(skillLevelStrArr[idx]) : 1;
+            skillLevel.put(keys.get(idx), level);
+        }
+        return skillLevel;
     }
 }

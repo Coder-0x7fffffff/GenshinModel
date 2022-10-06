@@ -1,19 +1,34 @@
-package space.xiami.project.genshinmodel.domain.effect;
+package space.xiami.project.genshinmodel.domain.effect.weapon;
 
+import space.xiami.project.genshinmodel.domain.effect.AbstractAffix;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Xiami
  */
-public class EquipAffix {
+public class WeaponAffix extends AbstractAffix {
+
+    /**
+     * 进阶id
+     */
     private Long affixId;
+
+    /**
+     * 唯一id
+     */
     private Long id;
+
+    /**
+     * 等级
+     */
     private Integer level;
-    private String name;
-    private String desc;
-    private List<AbstractBonus> addProperties;
+
+    /**
+     * 参数列表
+     */
     private List<Double> paramList;
 
     public Long getAffixId() {
@@ -38,30 +53,6 @@ public class EquipAffix {
 
     public void setLevel(Integer level) {
         this.level = level;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public List<AbstractBonus> getAddProperties() {
-        return addProperties;
-    }
-
-    public void setAddProperties(List<AbstractBonus> addProperties) {
-        this.addProperties = addProperties;
     }
 
     public List<Double> getParamList() {
