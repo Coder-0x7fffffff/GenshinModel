@@ -5,9 +5,14 @@ import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public interface Effect {
 
-    List<EquipAffix> affixes();
+    EquipAffix getEquipAffix();
 
-    void onCalculateAttribute(CalculateAttributeContext context);
+    void setEquipAffix(EquipAffix equipAffix);
+
+    default void onCalculateAttribute(CalculateAttributeContext context) {}
 }

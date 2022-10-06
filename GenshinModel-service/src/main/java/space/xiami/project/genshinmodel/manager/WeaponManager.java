@@ -2,12 +2,15 @@ package space.xiami.project.genshinmodel.manager;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
+import space.xiami.project.genshinmodel.domain.effect.Effect;
 import space.xiami.project.genshinmodel.domain.effect.EquipAffix;
+import space.xiami.project.genshinmodel.domain.effect.weapon.WeaponEffect;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
 import space.xiami.project.genshinmodel.util.converter.ConverterUtils;
-import space.xiami.project.genshinmodel.util.converter.EntryConverter;
+import space.xiami.project.genshinmodel.util.converter.EffectConverter;
+import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
 import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
 
 import javax.annotation.Resource;
@@ -32,7 +35,6 @@ public class WeaponManager {
         return weaponRestTemplate.list();
     }
 
-
     private static Weapon convertWeapon(space.xiami.project.genshindataviewer.domain.model.Weapon from, String level, Integer refinementRank){
         if(from == null){
             return null;
@@ -51,7 +53,7 @@ public class WeaponManager {
                         return;
                     }
                     bonusList.add(
-                            EntryConverter.property2Bonus(
+                            EquipPropTypeConverter.property2Bonus(
                                     property.getPropType(),
                                     property.getValue()
                             )
@@ -62,18 +64,18 @@ public class WeaponManager {
         }
         to.setBonuses(bonusList);
         to.setRefinementRank(refinementRank);
-
-        //TODO equipAffixes to effect
+        List<Effect> effects = new ArrayList<>();
         for(space.xiami.project.genshindataviewer.domain.model.Weapon.WeaponEquipAffix weaponEquipAffix : from.getWeaponEquipAffixes()){
             if(weaponEquipAffix.getRefinementRank().equals(refinementRank)){
                 weaponEquipAffix.getEquipAffix().forEach(equipAffix -> {
                     EquipAffix convertedAffix = ConverterUtils.convertEquipAffix(equipAffix);
-
+                    WeaponEffect weaponEffect = EffectConverter.toWeaponEffect(to, convertedAffix);
+                    effects.add(weaponEffect);
                 });
                 break;
             }
         }
-
+        to.setEffects(effects);
         return to;
     }
 }

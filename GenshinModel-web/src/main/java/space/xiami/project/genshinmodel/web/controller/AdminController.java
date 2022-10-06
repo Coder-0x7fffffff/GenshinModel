@@ -1,6 +1,7 @@
 package space.xiami.project.genshinmodel.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,18 +15,23 @@ import space.xiami.project.genshinmodel.manager.WeaponManager;
 import space.xiami.project.genshinmodel.rest.AvatarRestTemplate;
 import space.xiami.project.genshinmodel.rest.ReliquaryRestTemplate;
 import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
+import space.xiami.project.genshinmodel.util.FileUtil;
+import space.xiami.project.genshinmodel.util.PathUtil;
+import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
+import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
  * @author Xiami
  */
 @RestController
-@RequestMapping("/debug")
-public class DebugController {
+@RequestMapping("/admin")
+public class AdminController {
 
-    private Logger log = LoggerFactory.getLogger(DebugController.class);
+    private Logger log = LoggerFactory.getLogger(AdminController.class);
 
     @Resource
     private CalculateService calculateService;
@@ -39,29 +45,40 @@ public class DebugController {
     @Resource
     private AvatarRestTemplate avatarRestTemplate;
 
+    @Resource
+    private WeaponManager weaponManager;
+
     @Value("${debug.password:coder0x7fffffff}")
     private String password;
 
-    @RequestMapping("/getPropertyNames")
-    public String getPropertyNames(
+    private static String equipPropTypeFile = "equipPropType.json";
+
+    private static String weaponTypeFile = "weaponType.json";
+
+    @RequestMapping("/refreshConfig")
+    public String refreshConfig(
             String pw,
             @RequestParam(name = "type", defaultValue = "all") String type
     ) {
         if(!password.equals(pw)){
             return "Password error";
         }
-        // prop -> lang -> names
-        Map<String, Set<String>> nameMap = new HashMap<>();
-
+        // equipPropType prop -> names
+        Map<String, Set<String>> equipPropType = new HashMap<>();
+        Map<String, Set<String>> weaponType = new HashMap<>();
         LanguageEnum[] langValue = LanguageEnum.values();
+        // Weapon
         if(type.equals("all") || type.equals("weapon")){
-            // Weapon
             Collection weaponIds = weaponRestTemplate.list(LanguageEnum.EN.getCode()).values();
             weaponIds.forEach(id -> {
                 long start = System.currentTimeMillis();
                 Weapon weapon = weaponRestTemplate.getById(Long.valueOf((Integer)id), LanguageEnum.EN.getCode());
                 for(LanguageEnum language : langValue){
                     Weapon langWeapon = weaponRestTemplate.getById(Long.valueOf((Integer)id), language.getCode());
+                    // weaponType
+                    String weaponTypeKey = weapon.getWeaponType();
+                    String weaponTypeVal = langWeapon.getWeaponType();
+                    weaponType.computeIfAbsent(weaponTypeKey, v -> new HashSet<>()).add(weaponTypeVal);
                     // weaponProperties
                     int levelPropLen = weapon.getWeaponProperties().size();
                     for(int idx = 0; idx < levelPropLen; idx++){
@@ -71,7 +88,7 @@ public class DebugController {
                         for(int idx1 = 0; idx1 < len; idx1++){
                             String key = ori.getProperties().get(idx1).getPropType().replaceAll(" ", "");
                             String val = lori.getProperties().get(idx1).getPropType();
-                            nameMap.computeIfAbsent(key, v -> new HashSet<>())
+                            equipPropType.computeIfAbsent(key, v -> new HashSet<>())
                                     .add(val);
                         }
                     }
@@ -88,7 +105,7 @@ public class DebugController {
                             for(int idx2 = 0; idx2 < len1; idx2++){
                                 String key = oria.get(idx2).getPropType().replaceAll(" ", "");
                                 String val = loria.get(idx2).getPropType();
-                                nameMap.computeIfAbsent(key, v -> new HashSet<>())
+                                equipPropType.computeIfAbsent(key, v -> new HashSet<>())
                                         .add(val);
                             }
                         }
@@ -97,9 +114,8 @@ public class DebugController {
                 log.info("weaponID: {}, time: {}ms", id, System.currentTimeMillis() - start);
             });
         }
-
+        // Reliquary
         if(type.equals("all") || type.equals("reliquary")){
-            //Reliquary
             Collection<List> reliquaryIds = reliquaryRestTemplate.list(LanguageEnum.EN.getCode()).values();
             Set<Long> setIds = new HashSet<>();
             reliquaryIds.forEach(ids -> {
@@ -133,7 +149,7 @@ public class DebugController {
                             for(int idx2 = 0; idx2 < len1; idx2++){
                                 String key = oria.get(idx2).getPropType().replaceAll(" ", "");
                                 String val = loria.get(idx2).getPropType();
-                                nameMap.computeIfAbsent(key, v -> new HashSet<>())
+                                equipPropType.computeIfAbsent(key, v -> new HashSet<>())
                                         .add(val);
                             }
                         }
@@ -142,10 +158,8 @@ public class DebugController {
                 log.info("reliquarySetID: {}, time: {}ms", setId, System.currentTimeMillis() - start);
             });
         }
-
-        // 角色属性 + 角色天赋
+        // Avatar
         if(type.equals("all") || type.equals("avatar")){
-            //Avatar
             Collection avatarIds = avatarRestTemplate.list(LanguageEnum.EN.getCode()).values();
             avatarIds.forEach(id -> {
                 long start = System.currentTimeMillis();
@@ -161,7 +175,7 @@ public class DebugController {
                         for(int idx1 = 0; idx1<propLen; idx1++){
                             String key = avatarProp.getProperties().get(idx1).getPropType().replaceAll(" ", "");
                             String val = langAvatarProp.getProperties().get(idx1).getPropType();
-                            nameMap.computeIfAbsent(key, v -> new HashSet<>())
+                            equipPropType.computeIfAbsent(key, v -> new HashSet<>())
                                     .add(val);
                         }
                     }
@@ -174,7 +188,7 @@ public class DebugController {
                         for(int idx1 = 0; idx1<addPropLen; idx1++){
                             String key = avatarTalent.getAddProperties().get(idx1).getPropType().replaceAll(" ", "");
                             String val = langAvatarTalent.getAddProperties().get(idx1).getPropType();
-                            nameMap.computeIfAbsent(key, v -> new HashSet<>())
+                            equipPropType.computeIfAbsent(key, v -> new HashSet<>())
                                     .add(val);
                         }
                     }
@@ -182,18 +196,44 @@ public class DebugController {
                 log.info("reliquaryID: {}, time: {}ms", id, System.currentTimeMillis() - start);
             });
         }
-
-        // check repeat
-        Set<String> valueSet = new HashSet<>();
-        nameMap.values().forEach(set -> {
+        // check repeat key
+        Set<String> equipPropTypeValueSet = new HashSet<>();
+        Set<String> weaponTypeValueSet = new HashSet<>();
+        equipPropType.values().forEach(set -> {
             set.forEach(value -> {
-                if(valueSet.contains(value)){
+                if(equipPropTypeValueSet.contains(value)){
                     log.warn("repeat value: {}", value);
                 }
-                valueSet.add(value);
+                equipPropTypeValueSet.add(value);
             });
         });
-        return JSON.toJSONString(nameMap);
+        weaponType.values().forEach(set -> {
+            set.forEach(value -> {
+                if(weaponTypeValueSet.contains(value)){
+                    log.warn("repeat value: {}", value);
+                }
+                weaponTypeValueSet.add(value);
+            });
+        });
+        // write
+        try{
+            FileUtil.writeFile(PathUtil.getConfigDirectory() + equipPropTypeFile,
+                    JSON.toJSONString(equipPropType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
+            EquipPropTypeConverter.refresh();
+
+            FileUtil.writeFile(PathUtil.getConfigDirectory() + weaponTypeFile,
+                    JSON.toJSONString(weaponType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
+            WeaponTypeConverter.refresh();
+        }catch (Exception e){
+            log.error("error", e);
+        }
+
+
+        return "刷新成功";
     }
 
+    @RequestMapping("/getWeapon")
+    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeapon(Long id, String level, Integer rr){
+        return weaponManager.getById(id, level, rr);
+    }
 }

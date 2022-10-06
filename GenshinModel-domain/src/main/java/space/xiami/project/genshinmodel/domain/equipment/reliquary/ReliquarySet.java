@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Xiami
  */
-public class Reliquaries extends AbstractEquipment {
+public class ReliquarySet extends AbstractEquipment {
 
     private List<Reliquary> reliquaries;
 

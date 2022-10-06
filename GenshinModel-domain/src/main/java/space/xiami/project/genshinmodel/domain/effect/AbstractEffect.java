@@ -10,19 +10,21 @@ import java.util.List;
  */
 public abstract class AbstractEffect implements Effect{
 
-    private List<EquipAffix> equipAffixes;
+    private EquipAffix equipAffix;
 
     public AbstractEffect(){}
 
-    public AbstractEffect(List<EquipAffix> equipAffixes){
-        this.equipAffixes = equipAffixes;
+    public AbstractEffect(EquipAffix equipAffix){
+        this.equipAffix = equipAffix;
     }
 
     @Override
-    public List<EquipAffix> affixes(){
-        return equipAffixes;
+    public EquipAffix getEquipAffix() {
+        return equipAffix;
     }
 
     @Override
-    public void onCalculateAttribute(CalculateAttributeContext context) {}
+    public void setEquipAffix(EquipAffix equipAffix) {
+        this.equipAffix = equipAffix;
+    }
 }

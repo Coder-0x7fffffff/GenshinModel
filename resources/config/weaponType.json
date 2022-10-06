@@ -1,0 +1,66 @@
+{
+	"Claymore":[
+		"ดาบใหญ่",
+		"Épée à deux mains",
+		"Espadão",
+		"双手剑",
+		"Claymore",
+		"Trọng Kiếm",
+		"Mandoble",
+		"両手剣",
+		"雙手劍",
+		"양손검",
+		"Zweihänder",
+		"Двуручное"
+	],
+	"Sword":[
+		"Kiếm Đơn",
+		"Одноручное",
+		"Sword",
+		"한손검",
+		"Espada ligera",
+		"片手剣",
+		"Épée à une main",
+		"Einhänder",
+		"ดาบ",
+		"Espada",
+		"單手劍",
+		"单手剑"
+	],
+	"Polearm":[
+		"长柄武器",
+		"장병기",
+		"Древковое",
+		"Vũ Khí Cán Dài",
+		"Arme d'hast",
+		"Polearm",
+		"หอก",
+		"Stangenwaffe",
+		"長柄武器",
+		"Lanza",
+		"Lança"
+	],
+	"Bow":[
+		"Стрелковое",
+		"Arco",
+		"弓",
+		"Arc",
+		"Bogen",
+		"Bow",
+		"Cung",
+		"활",
+		"ธนู"
+	],
+	"Catalyst":[
+		"법구",
+		"สื่อเวท",
+		"Catalyseur",
+		"Catalisador",
+		"Pháp Khí",
+		"Катализатор",
+		"Catalizador",
+		"法器",
+		"Catalyst",
+		"Katalysator"
+	]
+}

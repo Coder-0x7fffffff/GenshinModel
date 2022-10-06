@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.util.FileUtil;
+import space.xiami.project.genshinmodel.util.MapUtil;
+import space.xiami.project.genshinmodel.util.PathUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +17,9 @@ import java.util.Map;
 /**
  * @author Xiami
  */
-public class EntryConverter {
+public class EquipPropTypeConverter {
 
-    private static Logger log = LoggerFactory.getLogger(EntryConverter.class);
+    private static Logger log = LoggerFactory.getLogger(EquipPropTypeConverter.class);
 
     private static Map<String, Class<? extends AbstractBonus>> propType2BonusMap = new HashMap<>();
 
@@ -26,17 +28,22 @@ public class EntryConverter {
     private static String packageName = "space.xiami.project.genshinmodel.domain.entry.bonus";
 
     static{
-        ClassPathResource equipPropTypeResource = new ClassPathResource(equipPropTypeFile);
+        refresh();
+    }
+
+    public static void refresh(){
+        propType2BonusMap.clear();
+        File file = new File(PathUtil.getConfigDirectory() + equipPropTypeFile);
         try {
-            if(equipPropTypeResource.getFile().exists()){
+            if(file.exists()){
                 try{
-                    JSONObject jsonObject = JSON.parseObject(new String(FileUtil.readFileOnce(equipPropTypeResource.getFile())));
+                    JSONObject jsonObject = JSON.parseObject(new String(FileUtil.readFile(file)));
                     jsonObject.forEach((key, val) -> {
                         if(val instanceof List){
                             String fullName = packageName +"."+key;
                             try{
                                 Class<? extends AbstractBonus> clazz = (Class<? extends AbstractBonus>) ClassLoader.getSystemClassLoader().loadClass(fullName);
-                                fillMap(propType2BonusMap, (List<String>) val, clazz);
+                                MapUtil.fillMap(propType2BonusMap, (List<String>) val, clazz);
                             }catch (Exception e) {
                                 log.error("init error", e);
                             }
@@ -49,16 +56,6 @@ public class EntryConverter {
         }catch (Exception e) {
             log.error("init error", e);
         }
-    }
-
-    private static <K, V> void fillMap(Map<K, V> map, List<K> keys, V value){
-        keys.forEach(key -> {
-            if(map.containsKey(key)){
-                log.warn("Same key: {} for value: {}", key, value);
-                return;
-            }
-            map.put(key, value);
-        });
     }
 
     public static AbstractBonus property2Bonus(String name, Double value){

@@ -1,9 +1,7 @@
 package space.xiami.project.genshinmodel.util.converter;
 
-import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
 import space.xiami.project.genshinmodel.domain.effect.EquipAffix;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
-import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class ConverterUtils {
                 return;
             }
             bonuses.add(
-                    EntryConverter.property2Bonus(
+                    EquipPropTypeConverter.property2Bonus(
                             addProperty.getPropType(),
                             addProperty.getValue()
                     )
