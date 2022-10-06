@@ -1,12 +1,12 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
-public class ATKPercentage extends AbstractBonus {
+public class BaseHP extends AbstractBonus {
 
-    public ATKPercentage(){
+    public BaseHP(){
         setValue(0);
     }
 
-    public ATKPercentage(double value) {
+    public BaseHP(double value) {
         setValue(value);
     }
 }

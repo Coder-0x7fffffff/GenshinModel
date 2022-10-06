@@ -37,12 +37,18 @@ public class EntryConverter {
                             try{
                                 Class<? extends AbstractBonus> clazz = (Class<? extends AbstractBonus>) ClassLoader.getSystemClassLoader().loadClass(fullName);
                                 fillMap(propType2BonusMap, (List<String>) val, clazz);
-                            }catch (Exception ignore) {}
+                            }catch (Exception e) {
+                                log.error("init error", e);
+                            }
                         }
                     });
-                }catch (Exception ignore){}
+                }catch (Exception e) {
+                    log.error("init error", e);
+                }
             }
-        } catch (Exception ignore) {}
+        }catch (Exception e) {
+            log.error("init error", e);
+        }
     }
 
     private static <K, V> void fillMap(Map<K, V> map, List<K> keys, V value){

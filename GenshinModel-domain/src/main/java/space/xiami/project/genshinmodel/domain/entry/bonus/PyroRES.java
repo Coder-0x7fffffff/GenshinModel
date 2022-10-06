@@ -1,12 +1,12 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
-public class HPPercentage extends AbstractBonus {
+public class PyroRES extends AbstractBonus {
 
-    public HPPercentage(){
+    public PyroRES(){
         setValue(0);
     }
 
-    public HPPercentage(double value) {
+    public PyroRES(double value) {
         setValue(value);
     }
 }

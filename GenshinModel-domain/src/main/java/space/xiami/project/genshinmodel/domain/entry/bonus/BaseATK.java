@@ -1,12 +1,12 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
-public class DEFPercentage extends AbstractBonus {
+public class BaseATK extends AbstractBonus {
 
-    public DEFPercentage(){
+    public BaseATK(){
         setValue(0);
     }
 
-    public DEFPercentage(double value) {
+    public BaseATK(double value) {
         setValue(value);
     }
 }

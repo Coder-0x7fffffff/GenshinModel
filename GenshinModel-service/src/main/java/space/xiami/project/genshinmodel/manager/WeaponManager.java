@@ -63,7 +63,7 @@ public class WeaponManager {
         to.setBonuses(bonusList);
         to.setRefinementRank(refinementRank);
 
-        //TODO equipAffixes
+        //TODO equipAffixes to effect
         for(space.xiami.project.genshindataviewer.domain.model.Weapon.WeaponEquipAffix weaponEquipAffix : from.getWeaponEquipAffixes()){
             if(weaponEquipAffix.getRefinementRank().equals(refinementRank)){
                 weaponEquipAffix.getEquipAffix().forEach(equipAffix -> {
