@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+/**
+ * @author Xiami
+ */
 public class JSONFactory{
 
     public static String serialize(Object object){

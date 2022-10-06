@@ -9,6 +9,9 @@ import space.xiami.project.genshinmodel.manager.CalculateManager;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 @Service
 public class CalculateServiceImpl implements CalculateService {
 

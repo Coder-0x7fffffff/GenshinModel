@@ -1,6 +1,6 @@
 package space.xiami.project.genshinmodel.domain.equipment.reliquary;
 
-import space.xiami.project.genshinmodel.common.enums.ReliquaryTypeEnum;
+import space.xiami.project.genshincommon.enums.ReliquaryTypeEnum;
 import space.xiami.project.genshinmodel.domain.equipment.AbstractEquipment;
 
 /**

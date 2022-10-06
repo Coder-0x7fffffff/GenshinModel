@@ -1,6 +1,6 @@
 package space.xiami.project.genshinmodel.domain.equipment;
 
-import space.xiami.project.genshinmodel.common.entry.bonus.AbstractBonus;
+import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
 
 import java.util.List;

@@ -3,26 +3,26 @@ package space.xiami.project.genshinmodel.domain.effect;
 import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
 
+import java.util.List;
+
 /**
  * @author Xiami
  */
 public abstract class AbstractEffect implements Effect{
 
-    private Avatar avatar;
+    private List<EquipAffix> equipAffixes;
 
     public AbstractEffect(){}
 
-    public AbstractEffect(Avatar avatar){
-        this.avatar = avatar;
+    public AbstractEffect(List<EquipAffix> equipAffixes){
+        this.equipAffixes = equipAffixes;
     }
 
     @Override
-    public Avatar avatar() {
-        return avatar;
+    public List<EquipAffix> affixes(){
+        return equipAffixes;
     }
 
     @Override
-    public void onCalculateAttribute(CalculateAttributeContext context) {
-
-    }
+    public void onCalculateAttribute(CalculateAttributeContext context) {}
 }

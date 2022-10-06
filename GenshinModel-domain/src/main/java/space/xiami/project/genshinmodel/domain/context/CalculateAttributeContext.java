@@ -1,7 +1,7 @@
 package space.xiami.project.genshinmodel.domain.context;
 
 import space.xiami.project.genshinmodel.domain.avatar.Avatar;
-import space.xiami.project.genshinmodel.common.entry.attributes.Attributes;
+import space.xiami.project.genshinmodel.domain.entry.attributes.Attributes;
 
 import java.util.List;
 
