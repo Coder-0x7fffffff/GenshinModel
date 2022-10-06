@@ -31,6 +31,10 @@ public class WeaponManager {
         return convertWeapon(weaponRestTemplate.getById(id), level, refinementRank);
     }
 
+    public Weapon getByName(String name, String level, Integer refinementRank){
+        return convertWeapon(weaponRestTemplate.getByName(name), level, refinementRank);
+    }
+
     public Map list(){
         return weaponRestTemplate.list();
     }

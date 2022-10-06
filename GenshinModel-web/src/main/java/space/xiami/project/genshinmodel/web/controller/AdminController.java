@@ -63,7 +63,7 @@ public class AdminController {
         if(!password.equals(pw)){
             return "Password error";
         }
-        // equipPropType prop -> names
+        // prop -> names
         Map<String, Set<String>> equipPropType = new HashMap<>();
         Map<String, Set<String>> weaponType = new HashMap<>();
         LanguageEnum[] langValue = LanguageEnum.values();
@@ -217,23 +217,27 @@ public class AdminController {
         });
         // write
         try{
+            // equipPropType
             FileUtil.writeFile(PathUtil.getConfigDirectory() + equipPropTypeFile,
                     JSON.toJSONString(equipPropType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
             EquipPropTypeConverter.refresh();
-
+            // weaponType
             FileUtil.writeFile(PathUtil.getConfigDirectory() + weaponTypeFile,
                     JSON.toJSONString(weaponType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
             WeaponTypeConverter.refresh();
         }catch (Exception e){
             log.error("error", e);
         }
-
-
         return "刷新成功";
     }
 
-    @RequestMapping("/getWeapon")
-    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeapon(Long id, String level, Integer rr){
+    @RequestMapping("/getWeaponById")
+    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponById(Long id, String level, Integer rr){
         return weaponManager.getById(id, level, rr);
+    }
+
+    @RequestMapping("/getWeaponByName")
+    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponByName(String name, String level, Integer rr){
+        return weaponManager.getByName(name, level, rr);
     }
 }
