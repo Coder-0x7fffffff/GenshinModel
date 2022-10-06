@@ -1,5 +1,8 @@
 package space.xiami.project.genshinmodel.domain.entry.attributes.advancedstats;
 
+/**
+ * @author Xiami
+ */
 public class EnergyRecharge extends AbstractAdvancedStats {
 
     public EnergyRecharge(){

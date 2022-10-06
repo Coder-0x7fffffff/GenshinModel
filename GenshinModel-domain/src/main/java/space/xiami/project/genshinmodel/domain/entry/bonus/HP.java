@@ -1,5 +1,8 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
+/**
+ * @author Xiami
+ */
 public class HP extends AbstractBonus {
 
     public HP(){

@@ -1,4 +1,4 @@
-package space.xiami.project.genshinmodel.manager;
+package space.xiami.project.genshinmodel.factory;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshincommon.NumberRange;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @author Xiami
  */
 @Component
-public class AvatarManager {
+public class AvatarFactory {
 
     @Resource
     private AvatarRestTemplate avatarRestTemplate;

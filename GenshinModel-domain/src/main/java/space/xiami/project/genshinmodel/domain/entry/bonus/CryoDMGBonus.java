@@ -1,5 +1,8 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
+/**
+ * @author Xiami
+ */
 public class CryoDMGBonus extends AbstractBonus {
 
     public CryoDMGBonus(){

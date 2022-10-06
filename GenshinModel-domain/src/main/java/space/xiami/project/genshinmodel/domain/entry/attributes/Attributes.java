@@ -8,6 +8,9 @@ import space.xiami.project.genshinmodel.domain.entry.attributes.elementaltype.*;
 
 import java.lang.reflect.Field;
 
+/**
+ * @author Xiami
+ */
 public class Attributes {
 
     // 基础属性

@@ -38,7 +38,7 @@ public class EffectConverter {
     }
 
     public static TalentEffect toTalentEffect(Talent talent, TalentAffix talentAffix) {
-        // TODO 为每一个技能提供不同的TalentEffect
+        // TODO 为每一个天赋提供不同的TalentEffect
         return new TalentEffect(talent, talentAffix);
     }
 }

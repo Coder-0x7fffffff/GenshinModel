@@ -2,7 +2,6 @@ package space.xiami.project.genshinmodel.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +12,8 @@ import space.xiami.project.genshincommon.NumberRange;
 import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshinmodel.client.CalculateService;
-import space.xiami.project.genshinmodel.manager.AvatarManager;
-import space.xiami.project.genshinmodel.manager.WeaponManager;
+import space.xiami.project.genshinmodel.factory.AvatarFactory;
+import space.xiami.project.genshinmodel.factory.WeaponFactory;
 import space.xiami.project.genshinmodel.rest.AvatarRestTemplate;
 import space.xiami.project.genshinmodel.rest.ReliquaryRestTemplate;
 import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
@@ -49,10 +48,10 @@ public class AdminController {
     private AvatarRestTemplate avatarRestTemplate;
 
     @Resource
-    private WeaponManager weaponManager;
+    private WeaponFactory weaponFactory;
 
     @Resource
-    private AvatarManager avatarManager;
+    private AvatarFactory avatarFactory;
 
     @Value("${debug.password:coder0x7fffffff}")
     private String password;
@@ -243,35 +242,35 @@ public class AdminController {
     }
 
     @RequestMapping("/getWeaponById")
-    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponById(Long id, String level, Integer rr){
-        return weaponManager.getById(id, level, rr);
+    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponById(Long id, String level, Integer refinementRank){
+        return weaponFactory.getById(id, level, refinementRank);
     }
 
     @RequestMapping("/getWeaponByName")
-    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponByName(String name, String level, Integer rr){
-        return weaponManager.getByName(name, level, rr);
+    public space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon getWeaponByName(String name, String level, Integer refinementRank){
+        return weaponFactory.getByName(name, level, refinementRank);
     }
 
     @RequestMapping("/getAvatarById")
-    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(Long id, String level, Integer talentLevel, String sl){
-        Map<String, NumberRange<Integer>> skillLevelRange = avatarManager.getSkillLevelRangeById(id);
-        return avatarManager.getById(id, level, fillSkillLevelMap(sl, skillLevelRange), talentLevel);
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(Long id, String level, Integer talentLevel, String skillLevel){
+        Map<String, NumberRange<Integer>> skillLevelRange = avatarFactory.getSkillLevelRangeById(id);
+        return avatarFactory.getById(id, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
     }
 
     @RequestMapping("/getAvatarByName")
-    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(String name, String level, Integer talentLevel, String sl){
-        Map<String, NumberRange<Integer>> skillLevelRange = avatarManager.getSkillLevelRangeByName(name);
-        return avatarManager.getByName(name, level, fillSkillLevelMap(sl, skillLevelRange), talentLevel);
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(String name, String level, Integer talentLevel, String skillLevel){
+        Map<String, NumberRange<Integer>> skillLevelRange = avatarFactory.getSkillLevelRangeByName(name);
+        return avatarFactory.getByName(name, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
     }
 
     @RequestMapping("/getAvatarSkillLevelRangeById")
     public Map<String, NumberRange<Integer>> getAvatarSkillLevelRangeById(Long id){
-        return avatarManager.getSkillLevelRangeById(id);
+        return avatarFactory.getSkillLevelRangeById(id);
     }
 
     @RequestMapping("/getAvatarSkillLevelRangeByName")
     public Map<String, NumberRange<Integer>> getAvatarSkillLevelRangeByName(String name){
-        return avatarManager.getSkillLevelRangeByName(name);
+        return avatarFactory.getSkillLevelRangeByName(name);
     }
 
     private static Map<String, Integer> fillSkillLevelMap(String skillLevelStr, Map<String, NumberRange<Integer>> range){

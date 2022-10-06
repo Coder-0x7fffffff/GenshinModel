@@ -1,4 +1,4 @@
-package space.xiami.project.genshinmodel.manager;
+package space.xiami.project.genshinmodel.factory;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Xiami
  */
 @Component
-public class WeaponManager {
+public class WeaponFactory {
 
     @Resource
     private WeaponRestTemplate weaponRestTemplate;
