@@ -2,6 +2,8 @@ package space.xiami.project.genshinmodel.util.converter;
 
 import space.xiami.project.genshindataviewer.domain.model.AddProperty;
 import space.xiami.project.genshindataviewer.domain.model.Avatar;
+import space.xiami.project.genshindataviewer.domain.model.EquipAffix;
+import space.xiami.project.genshinmodel.domain.effect.reliquaries.ReliquarySetAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.SkillProperty;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkillAffix;
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public class AffixConverter {
 
-    public static WeaponAffix convertEquipAffix(space.xiami.project.genshindataviewer.domain.model.EquipAffix from){
+    public static WeaponAffix convertEquipAffix(EquipAffix from){
         if(from == null){
             return null;
         }
@@ -73,6 +75,20 @@ public class AffixConverter {
         to.setTalentId(talent.getTalentId());
         to.setPrevTalentId(talent.getPrevTalentId());
         to.setParamList(talent.getParamList());
+        return to;
+    }
+
+    public static ReliquarySetAffix convertReliquarySetAffix(EquipAffix from) {
+        if(from == null){
+            return null;
+        }
+        ReliquarySetAffix to = new ReliquarySetAffix();
+        to.setAffixId(from.getAffixId());
+        to.setId(from.getId());
+        to.setName(from.getName());
+        to.setDesc(from.getDesc());
+        to.setBonuses(convertBonus(from.getAddProperties()));
+        to.setParamList(from.getParamList());
         return to;
     }
 

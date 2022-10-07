@@ -9,28 +9,55 @@ import space.xiami.project.genshinmodel.domain.equipment.AbstractEquipment;
 public class Reliquary extends AbstractEquipment {
 
     /**
+     * 唯一id
+     */
+    private Long id;
+
+    /**
+     * 分组id
+     */
+    private Long setId;
+
+    /**
      * 等级
      */
-    private String level;
+    private Integer level;
 
     /**
      * 类型
+     * @see space.xiami.project.genshincommon.enums.ReliquaryTypeEnum
      */
-    private ReliquaryTypeEnum reliquaryType;
+    private Byte reliquaryType;
 
-    public String getLevel() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getSetId() {
+        return setId;
+    }
+
+    public void setSetId(Long setId) {
+        this.setId = setId;
+    }
+
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public ReliquaryTypeEnum getReliquaryType() {
+    public Byte getReliquaryType() {
         return reliquaryType;
     }
 
-    public void setReliquaryType(ReliquaryTypeEnum reliquaryType) {
+    public void setReliquaryType(Byte reliquaryType) {
         this.reliquaryType = reliquaryType;
     }
 }

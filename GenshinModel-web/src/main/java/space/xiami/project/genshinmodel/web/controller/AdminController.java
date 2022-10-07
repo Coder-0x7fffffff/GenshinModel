@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,9 @@ import space.xiami.project.genshincommon.NumberRange;
 import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshinmodel.client.CalculateService;
+import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.factory.AvatarFactory;
+import space.xiami.project.genshinmodel.factory.ReliquaryFactory;
 import space.xiami.project.genshinmodel.factory.WeaponFactory;
 import space.xiami.project.genshinmodel.rest.AvatarRestTemplate;
 import space.xiami.project.genshinmodel.rest.ReliquaryRestTemplate;
@@ -20,11 +23,13 @@ import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
 import space.xiami.project.genshinmodel.util.FileUtil;
 import space.xiami.project.genshinmodel.util.PathUtil;
 import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
+import space.xiami.project.genshinmodel.util.converter.ReliquaryTypeConverter;
 import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Xiami
@@ -53,12 +58,17 @@ public class AdminController {
     @Resource
     private AvatarFactory avatarFactory;
 
+    @Resource
+    private ReliquaryFactory reliquaryFactory;
+
     @Value("${debug.password:coder0x7fffffff}")
     private String password;
 
     private static String equipPropTypeFile = "equipPropType.json";
 
     private static String weaponTypeFile = "weaponType.json";
+
+    private static String reliquaryTypeFile = "reliquaryType.json";
 
     @RequestMapping("/refreshConfig")
     public String refreshConfig(
@@ -71,6 +81,7 @@ public class AdminController {
         // prop -> names
         Map<String, Set<String>> equipPropType = new HashMap<>();
         Map<String, Set<String>> weaponType = new HashMap<>();
+        Map<String, Set<String>> reliquaryType = new HashMap<>();
         LanguageEnum[] langValue = LanguageEnum.values();
         // Weapon
         if(type.equals("all") || type.equals("weapon")){
@@ -121,15 +132,21 @@ public class AdminController {
         }
         // Reliquary
         if(type.equals("all") || type.equals("reliquary")){
-            Collection<List> reliquaryIds = reliquaryRestTemplate.list(LanguageEnum.EN.getCode()).values();
+            Collection reliquaryId = reliquaryRestTemplate.list(LanguageEnum.EN.getCode()).values();
             Set<Long> setIds = new HashSet<>();
-            reliquaryIds.forEach(ids -> {
-                ids.forEach(id -> {
-                    long start = System.currentTimeMillis();
-                    Reliquary reliquary = reliquaryRestTemplate.getById(Long.valueOf((Integer) id), LanguageEnum.EN.getCode());
-                    setIds.add(reliquary.getSetId());
-                    log.info("reliquaryID: {}, time: {}ms", id, System.currentTimeMillis() - start);
-                });
+            reliquaryId.forEach(id -> {
+                long start = System.currentTimeMillis();
+                Reliquary reliquary = reliquaryRestTemplate.getById(Long.valueOf((Integer) id), LanguageEnum.EN.getCode());
+                for(LanguageEnum language : langValue) {
+                    Reliquary langReliquary = reliquaryRestTemplate.getById(Long.valueOf((Integer) id), language.getCode());
+                    // weaponType
+                    String reliquaryTypeKey = reliquary.getEquipType();
+                    String reliquaryTypeVal = langReliquary.getEquipType();
+                    reliquaryType.computeIfAbsent(reliquaryTypeKey, v -> new HashSet<>())
+                            .add(reliquaryTypeVal);
+                }
+                setIds.add(reliquary.getSetId());
+                log.info("reliquaryID: {}, time: {}ms", id, System.currentTimeMillis() - start);
             });
             setIds.forEach(setId -> {
                 if(setId == null){
@@ -209,6 +226,7 @@ public class AdminController {
         // check repeat key
         Set<String> equipPropTypeValueSet = new HashSet<>();
         Set<String> weaponTypeValueSet = new HashSet<>();
+        Set<String> reliquaryTypeValueSet = new HashSet<>();
         equipPropType.values().forEach(set -> {
             set.forEach(value -> {
                 if(equipPropTypeValueSet.contains(value)){
@@ -225,6 +243,14 @@ public class AdminController {
                 weaponTypeValueSet.add(value);
             });
         });
+        reliquaryType.values().forEach(set -> {
+            set.forEach(value -> {
+                if(reliquaryTypeValueSet.contains(value)){
+                    log.warn("repeat value: {}", value);
+                }
+                reliquaryTypeValueSet.add(value);
+            });
+        });
         // write
         try{
             // equipPropType
@@ -235,6 +261,10 @@ public class AdminController {
             FileUtil.writeFile(PathUtil.getConfigDirectory() + weaponTypeFile,
                     JSON.toJSONString(weaponType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
             WeaponTypeConverter.refresh();
+            // reliquaryType
+            FileUtil.writeFile(PathUtil.getConfigDirectory() + reliquaryTypeFile,
+                    JSON.toJSONString(reliquaryType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
+            ReliquaryTypeConverter.refresh();
         }catch (Exception e){
             log.error("error", e);
         }
@@ -258,7 +288,7 @@ public class AdminController {
     }
 
     @RequestMapping("/getAvatarByName")
-    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(String name, String level, Integer talentLevel, String skillLevel){
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarByName(String name, String level, Integer talentLevel, String skillLevel){
         Map<String, NumberRange<Integer>> skillLevelRange = avatarFactory.getSkillLevelRangeByName(name);
         return avatarFactory.getByName(name, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
     }
@@ -271,6 +301,64 @@ public class AdminController {
     @RequestMapping("/getAvatarSkillLevelRangeByName")
     public Map<String, NumberRange<Integer>> getAvatarSkillLevelRangeByName(String name){
         return avatarFactory.getSkillLevelRangeByName(name);
+    }
+
+    @RequestMapping("/getReliquaryById")
+    public space.xiami.project.genshinmodel.domain.equipment.reliquary.Reliquary getReliquaryById(Long id, Integer level, String bonuses) {
+        return reliquaryFactory.getById(id, level, convertBonus(bonuses));
+    }
+
+    @RequestMapping("/getReliquaryByName")
+    public space.xiami.project.genshinmodel.domain.equipment.reliquary.Reliquary getReliquaryByName(String name, Integer level, String bonuses) {
+        return reliquaryFactory.getByName(name, level, convertBonus(bonuses));
+    }
+
+    @RequestMapping("/listReliquary")
+    public Map list(){
+        return reliquaryFactory.list();
+    }
+
+    @RequestMapping("/getReliquarySetById")
+    public space.xiami.project.genshinmodel.domain.equipment.reliquary.ReliquarySet getReliquarySetById(Long id){
+        return reliquaryFactory.getSetById(id);
+    }
+
+    @RequestMapping("/listReliquarySet")
+    public Map listSet(){
+        return reliquaryFactory.listSet();
+    }
+    @RequestMapping("/createReliquarySet")
+    public List<space.xiami.project.genshinmodel.domain.equipment.reliquary.ReliquarySet> createReliquarySet(String reliquaries){
+        // 测试参数reliquaries=72340@20@攻击力-24~72320@20@攻击力-24~71350@20@攻击力-24~71340@20@攻击力-24~72320@20@攻击力-24
+        return reliquaryFactory.createReliquarySet(convertReliquaries(reliquaries));
+    }
+
+    private List<space.xiami.project.genshinmodel.domain.equipment.reliquary.Reliquary> convertReliquaries(String reliquaries){
+        String[] reliquaryStrArr = reliquaries.split("~");
+        return Arrays.stream(reliquaryStrArr).map(reliquaryStr -> {
+            String[] param = reliquaryStr.split("@");
+            return getReliquaryById(Long.valueOf(
+                    param[0]),
+                    Integer.valueOf(param[1]),
+                    param[2]
+            );
+        }).collect(Collectors.toList());
+    }
+
+    private static List<AbstractBonus> convertBonus(String bonuses){
+        if(!StringUtils.hasLength(bonuses)){
+            return null;
+        }
+        String[] bonusStrArr = bonuses.split("_");
+        List<AbstractBonus> bonusList = new ArrayList<>();
+        Arrays.stream(bonusStrArr).forEach(str -> {
+            String[] strings = str.split("-");
+            if(strings.length == 2){
+                bonusList.add(EquipPropTypeConverter.property2Bonus(strings[0], Double.valueOf(strings[1]))
+                );
+            }
+        });
+        return bonusList;
     }
 
     private static Map<String, Integer> fillSkillLevelMap(String skillLevelStr, Map<String, NumberRange<Integer>> range){
