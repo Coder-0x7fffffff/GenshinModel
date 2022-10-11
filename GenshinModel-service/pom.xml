@@ -5,7 +5,7 @@
     <parent>
         <artifactId>GenshinModel</artifactId>
         <groupId>space.xiami.project.genshinmodel</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,16 +17,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>space.xiami.project.genshindataviewer</groupId>
+            <artifactId>genshindataviewer-domain</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>space.xiami.project.genshindataviewer</groupId>
+            <artifactId>genshindataviewer-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>space.xiami.project.genshinmodel</groupId>
             <artifactId>GenshinModel-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>space.xiami.project.genshinmodel</groupId>
             <artifactId>GenshinModel-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

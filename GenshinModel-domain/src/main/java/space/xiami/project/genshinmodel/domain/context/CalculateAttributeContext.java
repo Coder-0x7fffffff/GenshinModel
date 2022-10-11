@@ -1,42 +1,66 @@
 package space.xiami.project.genshinmodel.domain.context;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
-import space.xiami.project.genshinmodel.common.entry.attributes.Attributes;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
+import space.xiami.project.genshinmodel.domain.entry.attributes.Attributes;
+import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public class CalculateAttributeContext extends AbstractContext<CalculateAttributeResult> {
 
-    private List<Integer> realTimeHP;
+    /**
+     * avatarName -> 血量
+     */
+    private Map<String, Integer> realTimeHP;
 
-    private List<Attributes> realTimeAttributes;
+    /**
+     *  avatarName-> 面板
+     */
+    private Map<String, Attributes> realTimeAttributes;
 
-    public CalculateAttributeContext(List<Character> characters) {
-        super(characters);
+    /**
+     * avatarName -> bonusName -> bonus
+     */
+    private Map<String, Map<String, AbstractBonus>> bonuses;
+
+    public CalculateAttributeContext(List<Avatar> avatars) {
+        super(avatars);
     }
 
     @Override
     public CalculateAttributeResult buildResult() {
         CalculateAttributeResult result = new CalculateAttributeResult();
-        result.setCharacters(getCharacters());
+        result.setAvatars(getAvatars());
         result.setRealTimeHP(realTimeHP);
         result.setRealTimeAttributes(realTimeAttributes);
         return result;
     }
 
-    public List<Integer> getRealTimeHP() {
+    public Map<String, Integer> getRealTimeHP() {
         return realTimeHP;
     }
 
-    public void setRealTimeHP(List<Integer> realTimeHP) {
+    public void setRealTimeHP(Map<String, Integer> realTimeHP) {
         this.realTimeHP = realTimeHP;
     }
 
-    public List<Attributes> getRealTimeAttributes() {
+    public Map<String, Attributes> getRealTimeAttributes() {
         return realTimeAttributes;
     }
 
-    public void setRealTimeAttributes(List<Attributes> realTimeAttributes) {
+    public void setRealTimeAttributes(Map<String, Attributes> realTimeAttributes) {
         this.realTimeAttributes = realTimeAttributes;
+    }
+
+    public Map<String, Map<String, AbstractBonus>> getBonuses() {
+        return bonuses;
+    }
+
+    public void setBonuses(Map<String, Map<String, AbstractBonus>> bonuses) {
+        this.bonuses = bonuses;
     }
 }

@@ -6,6 +6,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Xiami
+ */
 @SpringBootApplication
 @Configuration
 @ComponentScan(value = "space.xiami.project.genshinmodel")

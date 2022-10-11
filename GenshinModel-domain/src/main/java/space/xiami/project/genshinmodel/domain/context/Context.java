@@ -1,15 +1,18 @@
 package space.xiami.project.genshinmodel.domain.context;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public interface Context<Result> {
 
-    List<Character> getCharacters();
+    List<Avatar> getAvatars();
 
-    void setCharacters(List<Character> characters);
+    void setAvatars(List<Avatar> avatars);
 
     List<Effect> getEffectInvokeOrder(List<Effect> effects);
 

@@ -1,25 +1,44 @@
 package space.xiami.project.genshinmodel.domain.effect;
 
-import space.xiami.project.genshinmodel.domain.character.Character;
-import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
+import space.xiami.project.genshinmodel.domain.equipment.Equipment;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * @author Xiami
+ */
 public abstract class AbstractEffect implements Effect{
 
-    private Character character;
+    private final Equipment parent;
 
-    public AbstractEffect(){}
+    private final Affix affix;
 
-    public AbstractEffect(Character character){
-        this.character = character;
+    private final String uniqueKey;
+
+    public AbstractEffect(Equipment parent, Affix affix) {
+        this.parent = parent;
+        this.affix = affix;
+        this.uniqueKey = String.join(
+                "@",
+                getClass().getSimpleName(),
+                parent.getClass().getSimpleName(),
+                this.affix.getClass().getSimpleName()
+        );
     }
 
     @Override
-    public Character character() {
-        return character;
+    public String uniqueKey() {
+        return uniqueKey;
     }
 
     @Override
-    public void onCalculateAttribute(CalculateAttributeContext context) {
+    public Equipment getParent() {
+        return parent;
+    }
 
+    @Override
+    public Affix getAffix() {
+        return affix;
     }
 }
