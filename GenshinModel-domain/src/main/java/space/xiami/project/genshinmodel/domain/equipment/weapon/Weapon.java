@@ -1,5 +1,6 @@
 package space.xiami.project.genshinmodel.domain.equipment.weapon;
 
+import space.xiami.project.genshinmodel.domain.entry.attributes.AbstractAttribute;
 import space.xiami.project.genshinmodel.domain.equipment.AbstractEquipment;
 
 /**
@@ -32,6 +33,11 @@ public class Weapon extends AbstractEquipment {
      * 精炼等级
      */
     private Integer refinementRank;
+
+    /**
+     * 主属性
+     */
+    private AbstractAttribute mainAttribute;
 
     public Long getId() {
         return id;
@@ -71,5 +77,13 @@ public class Weapon extends AbstractEquipment {
 
     public void setRefinementRank(Integer refinementRank) {
         this.refinementRank = refinementRank;
+    }
+
+    public AbstractAttribute getMainAttribute() {
+        return mainAttribute;
+    }
+
+    public void setMainAttribute(AbstractAttribute mainAttribute) {
+        this.mainAttribute = mainAttribute;
     }
 }

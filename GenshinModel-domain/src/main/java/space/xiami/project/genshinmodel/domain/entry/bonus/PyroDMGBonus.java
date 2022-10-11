@@ -1,9 +1,12 @@
 package space.xiami.project.genshinmodel.domain.entry.bonus;
 
+import space.xiami.project.genshinmodel.domain.entry.attributes.AbstractAttribute;
+import space.xiami.project.genshinmodel.domain.entry.attributes.Attributes;
+
 /**
  * @author Xiami
  */
-public class PyroDMGBonus extends AbstractBonus {
+public class PyroDMGBonus extends AbstractAddAttributeBonus {
 
     public PyroDMGBonus(){
         setValue(0);
@@ -11,5 +14,10 @@ public class PyroDMGBonus extends AbstractBonus {
 
     public PyroDMGBonus(double value) {
         setValue(value);
+    }
+
+    @Override
+    public AbstractAttribute relatedAttribute(Attributes attributes) {
+        return attributes.getPyroDMGBonus();
     }
 }

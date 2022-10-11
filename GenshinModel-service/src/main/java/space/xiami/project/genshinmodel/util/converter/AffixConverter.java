@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class AffixConverter {
 
-    public static WeaponAffix convertEquipAffix(EquipAffix from){
+    public static WeaponAffix convertWeaponEquipAffix(EquipAffix from){
         if(from == null){
             return null;
         }
@@ -59,6 +59,7 @@ public class AffixConverter {
         to.setName(skill.getName());
         to.setDesc(skill.getDesc());
         to.setSkillProperty(convertSkillProperty(skill, level));
+        to.setProudSkillId(skill.getProudSkillId());
         to.setProudSkillGroupId(skill.getProudSkillGroupId());
         to.setNeedAvatarPromoteLevel(skill.getNeedAvatarPromoteLevel());
         return to;

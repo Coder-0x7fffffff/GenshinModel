@@ -1,7 +1,6 @@
 package space.xiami.project.genshinmodel.domain.effect.talent;
 
 import space.xiami.project.genshinmodel.domain.effect.AbstractAffix;
-import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
 public class TalentAffix extends AbstractAffix {
 
     /**
-     * 命座id
+     * 唯一命座id
      */
     private Long talentId;
 

@@ -9,19 +9,7 @@ import java.util.Collections;
  * @author Xiami
  */
 public class ActiveSkillEffect extends AbstractSkillEffect {
-
-    private final ActiveSkill activeSkill;
-
-    public ActiveSkillEffect(ActiveSkill activeSkill){
-        this.activeSkill = activeSkill;
-    }
-
-    public ActiveSkillEffect(ActiveSkill activeSkill, ActiveSkillAffix activeSkillAffix) {
-        this.activeSkill = activeSkill;
-        setAffixes(Collections.singletonList(activeSkillAffix));
-    }
-
-    public ActiveSkill skill() {
-        return activeSkill;
+    public ActiveSkillEffect(ActiveSkill parent, ActiveSkillAffix activeSkillAffix) {
+        super(parent, activeSkillAffix);
     }
 }

@@ -10,22 +10,23 @@ import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkill
 import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkillEffect;
 import space.xiami.project.genshinmodel.domain.effect.talent.TalentAffix;
 import space.xiami.project.genshinmodel.domain.effect.talent.TalentEffect;
+import space.xiami.project.genshinmodel.domain.entry.attributes.AbstractAttribute;
+import space.xiami.project.genshinmodel.domain.entry.attributes.CRITDMG;
+import space.xiami.project.genshinmodel.domain.entry.attributes.CRITRate;
+import space.xiami.project.genshinmodel.domain.entry.attributes.EnergyRecharge;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.equipment.skill.active.ActiveSkill;
 import space.xiami.project.genshinmodel.domain.equipment.skill.passive.PassiveSkill;
 import space.xiami.project.genshinmodel.domain.equipment.talent.Talent;
 import space.xiami.project.genshinmodel.rest.AvatarRestTemplate;
-import space.xiami.project.genshinmodel.util.converter.AffixConverter;
-import space.xiami.project.genshinmodel.util.converter.EffectConverter;
-import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
-import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
+import space.xiami.project.genshinmodel.util.ConfigUtil;
+import space.xiami.project.genshinmodel.util.converter.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Xiami
@@ -96,9 +97,24 @@ public class AvatarFactory {
         // levelProperty
         LevelProperty levelProperty = from.getAvatarProperties().stream()
                 .filter(lp -> lp.getLevel() != null && lp.getLevel().equals(level)).findAny().get();
-        List<AbstractBonus> bonuses = levelProperty.getProperties().stream()
-                .map(v -> EquipPropTypeConverter.property2Bonus(v.getPropType(), v.getValue()))
-                .collect(Collectors.toList());
+        // 基础面板 + 与突破加成
+        List<AbstractAttribute> attributes = new ArrayList<>();
+        List<AbstractBonus> bonuses = new ArrayList<>();
+        attributes.add(new CRITRate(from.getCritical()));
+        attributes.add(new CRITDMG(from.getCriticalHurt()));
+        attributes.add(new EnergyRecharge(from.getChargeEfficiency()));
+        levelProperty.getProperties()
+                .forEach(v -> {
+                    AbstractBonus bonus = EquipPropTypeConverter.property2Bonus(v.getPropType(), v.getValue());
+                    if(bonus != null){
+                        if(ConfigUtil.getConfig().getAvatarBonusToAttribute().contains(bonus.getName())){
+                            attributes.add(AttributeLevelPropTypeConverter.property2Bonus(v.getPropType(), v.getValue()));
+                        }else{
+                            bonuses.add(bonus);
+                        }
+                    }
+                });
+        to.setAttributes(attributes);
         to.setBonuses(bonuses);
         return to;
     }

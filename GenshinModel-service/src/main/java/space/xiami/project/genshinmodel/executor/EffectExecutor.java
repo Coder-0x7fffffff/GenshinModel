@@ -10,5 +10,5 @@ import java.util.List;
  * @author Xiami
  */
 public interface EffectExecutor {
-    <Result> Result execute(List<Effect> effects, Context<Result> context, EffectMethodEnum effectMethodEnum);
+    <Result> void execute(List<Effect> effects, Context<Result> context, EffectMethodEnum effectMethodEnum);
 }

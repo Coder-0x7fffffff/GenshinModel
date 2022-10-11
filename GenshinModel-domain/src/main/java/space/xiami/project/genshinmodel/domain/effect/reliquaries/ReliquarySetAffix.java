@@ -10,12 +10,12 @@ import java.util.List;
 public class ReliquarySetAffix extends AbstractAffix {
 
     /**
-     * 进阶id
+     * 唯一id
      */
     private Long affixId;
 
     /**
-     * 唯一id
+     * id
      */
     private Long id;
 

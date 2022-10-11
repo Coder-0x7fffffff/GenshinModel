@@ -1,8 +1,8 @@
 package space.xiami.project.genshinmodel.domain.avatar;
 
-import space.xiami.project.genshinmodel.domain.entry.attributes.Attributes;
+import space.xiami.project.genshinmodel.domain.entry.attributes.AbstractAttribute;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
-import space.xiami.project.genshinmodel.domain.equipment.Equipment;
+import space.xiami.project.genshinmodel.domain.equipment.reliquary.Reliquary;
 import space.xiami.project.genshinmodel.domain.equipment.reliquary.ReliquarySet;
 import space.xiami.project.genshinmodel.domain.equipment.skill.active.ActiveSkill;
 import space.xiami.project.genshinmodel.domain.equipment.skill.passive.PassiveSkill;
@@ -47,6 +47,11 @@ public class Avatar {
     /**
      * 角色属性
      */
+    private List<AbstractAttribute> attributes;
+
+    /**
+     * 加成
+     */
     private List<AbstractBonus> bonuses;
 
     /**
@@ -56,6 +61,11 @@ public class Avatar {
 
     /**
      * 圣遗物
+     */
+    private List<Reliquary> reliquaries;
+
+    /**
+     * 圣遗物套装效果
      */
     private List<ReliquarySet> reliquarySets;
 
@@ -106,6 +116,14 @@ public class Avatar {
         this.weaponType = weaponType;
     }
 
+    public List<AbstractAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<AbstractAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
     public List<AbstractBonus> getBonuses() {
         return bonuses;
     }
@@ -128,6 +146,14 @@ public class Avatar {
 
     public void setWeapons(List<Weapon> weapons) {
         this.weapons = weapons;
+    }
+
+    public List<Reliquary> getReliquaries() {
+        return reliquaries;
+    }
+
+    public void setReliquaries(List<Reliquary> reliquaries) {
+        this.reliquaries = reliquaries;
     }
 
     public List<ReliquarySet> getReliquarySets() {

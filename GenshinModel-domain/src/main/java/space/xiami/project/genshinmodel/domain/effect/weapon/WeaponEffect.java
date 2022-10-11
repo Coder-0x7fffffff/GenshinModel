@@ -9,19 +9,7 @@ import java.util.Collections;
  * @author Xiami
  */
 public class WeaponEffect extends AbstractEffect {
-
-    private final Weapon weapon;
-
-    public WeaponEffect(Weapon weapon){
-        this.weapon = weapon;
-    }
-
-    public WeaponEffect(Weapon weapon, WeaponAffix weaponAffix) {
-        this.weapon = weapon;
-        setAffixes(Collections.singletonList(weaponAffix));
-    }
-
-    public Weapon weapon() {
-        return weapon;
+    public WeaponEffect(Weapon parent, WeaponAffix weaponAffix) {
+        super(parent, weaponAffix);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "avatarBonusToAttribute": [
+    "BaseHP",
+    "BaseATK",
+    "BaseDEF"
+  ]
+}

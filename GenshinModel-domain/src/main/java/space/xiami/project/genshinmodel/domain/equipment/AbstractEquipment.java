@@ -1,5 +1,6 @@
 package space.xiami.project.genshinmodel.domain.equipment;
 
+import space.xiami.project.genshinmodel.domain.avatar.Avatar;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
 
@@ -10,11 +11,23 @@ import java.util.List;
  */
 public class AbstractEquipment implements Equipment {
 
+    private Avatar parent;
+
     private String name;
 
     private List<AbstractBonus> bonuses;
 
     private List<Effect> effects;
+
+    @Override
+    public Avatar getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(Avatar parent) {
+        this.parent = parent;
+    }
 
     @Override
     public String getName() {

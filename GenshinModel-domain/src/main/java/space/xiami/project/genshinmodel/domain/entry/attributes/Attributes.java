@@ -2,9 +2,6 @@ package space.xiami.project.genshinmodel.domain.entry.attributes;
 
 import space.xiami.project.genshincommon.exception.EntryException;
 import space.xiami.project.genshinmodel.domain.entry.Entry;
-import space.xiami.project.genshinmodel.domain.entry.attributes.advancedstats.*;
-import space.xiami.project.genshinmodel.domain.entry.attributes.basestats.*;
-import space.xiami.project.genshinmodel.domain.entry.attributes.elementaltype.*;
 
 import java.lang.reflect.Field;
 
@@ -17,144 +14,144 @@ public class Attributes {
     /**
      * 生命上限
      */
-    private MaxHP maxHP;
+    private BaseHP baseHP = new BaseHP();
 
     /**
      * 攻击力
      */
-    private ATK atk;
+    private BaseATK baseATK = new BaseATK();
 
     /**
      * 防御力
      */
-    private DEF def;
+    private BaseDEF baseDEF = new BaseDEF();
 
     /**
      * 元素精通
      */
-    private ElementalMastery elementalMastery;
+    private ElementalMastery elementalMastery = new ElementalMastery();
 
     /**
      * 体力上限
      */
-    private MaxStamina maxStamina;
+    private MaxStamina maxStamina = new MaxStamina();
 
     //进阶属性
     /**
      * 暴击率
      */
-    private CRITRate critRate;
+    private CRITRate critRate = new CRITRate();
 
     /**
      * 暴击伤害
      */
-    private CRITDMG critDmg;
+    private CRITDMG critDmg = new CRITDMG();
 
     /**
      * 治疗加成
      */
-    private HealingBonus healingBonus;
+    private HealingBonus healingBonus = new HealingBonus();
 
     /**
      * 受治疗加成
      */
-    private IncomingHealingBonus incomingHealingBonus;
+    private IncomingHealingBonus incomingHealingBonus = new IncomingHealingBonus();
 
     /**
      * 元素充能效率
      */
-    private EnergyRecharge energyRecharge;
+    private EnergyRecharge energyRecharge = new EnergyRecharge();
 
     /**
      * 冷却缩减
      */
-    private CDReduction cdReduction;
+    private CDReduction cdReduction = new CDReduction();
 
     /**
      * 护盾强效
      */
-    private ShieldStrength shieldStrength;
-    
+    private ShieldStrength shieldStrength = new ShieldStrength();
+
     //元素属性
     /**
      * 火元素伤害加成
      */
-    private PyroDMGBonus pyroDMGBonus;
+    private PyroDMGBonus pyroDMGBonus = new PyroDMGBonus();
 
     /**
      * 火元素抗性
      */
-    private PyroRES pyroRES;
+    private PyroRES pyroRES = new PyroRES();
 
     /**
      * 水元素伤害加成
      */
-    private HydroDMGBonus hydroDMGBonus;
+    private HydroDMGBonus hydroDMGBonus = new HydroDMGBonus();
 
     /**
      * 水元素抗性
      */
-    private HydroRES hydroRES;
+    private HydroRES hydroRES = new HydroRES();
 
     /**
      * 草元素伤害加成
      */
-    private DendroDMGBonus dendroDMGBonus;
+    private DendroDMGBonus dendroDMGBonus = new DendroDMGBonus();
 
     /**
      * 草元素抗性
      */
-    private DendroRES dendroRES;
+    private DendroRES dendroRES = new DendroRES();
 
     /**
      * 雷元素伤害加成
      */
-    private ElectroDMGBonus electroDMGBonus;
+    private ElectroDMGBonus electroDMGBonus = new ElectroDMGBonus();
 
     /**
      * 雷元素抗性
      */
-    private ElectroRES electroRES;
+    private ElectroRES electroRES = new ElectroRES();
 
     /**
      * 风元素伤害加成
      */
-    private AnemoDMGBonus anemoDMGBonus;
+    private AnemoDMGBonus anemoDMGBonus = new AnemoDMGBonus();
 
     /**
      * 风元素抗性
      */
-    private AnemoRES anemoRES;
+    private AnemoRES anemoRES = new AnemoRES();
 
     /**
      * 冰元素伤害加成
      */
-    private CryoDMGBonus cryoDMGBonus;
+    private CryoDMGBonus cryoDMGBonus = new CryoDMGBonus();
 
     /**
      * 冰元素抗性
      */
-    private CryoRES cryoRES;
+    private CryoRES cryoRES = new CryoRES();
 
     /**
      * 岩元素伤害加成
      */
-    private GeoDMGBonus geoDMGBonus;
+    private GeoDMGBonus geoDMGBonus = new GeoDMGBonus();
 
     /**
      * 岩元素抗性
      */
-    private GeoRES geoRES;
+    private GeoRES geoRES = new GeoRES();
 
     /**
      * 物理伤害加成
      */
-    private PhysicalDMGBonus physicalDMGBonus;
+    private PhysicalDMGBonus physicalDMGBonus = new PhysicalDMGBonus();
 
     /**
      * 物理抗性
      */
-    private PhysicalRES physicalRES;
+    private PhysicalRES physicalRES = new PhysicalRES();
     
     public Entry getEntry(String name) throws EntryException {
         try{
@@ -227,28 +224,28 @@ public class Attributes {
         }
     }
 
-    public MaxHP getMaxHP() {
-        return maxHP;
+    public BaseHP getBaseHP() {
+        return baseHP;
     }
 
-    public void setMaxHP(MaxHP maxHP) {
-        this.maxHP = maxHP;
+    public void setBaseHP(BaseHP baseHP) {
+        this.baseHP = baseHP;
     }
 
-    public ATK getAtk() {
-        return atk;
+    public BaseATK getBaseATK() {
+        return baseATK;
     }
 
-    public void setAtk(ATK atk) {
-        this.atk = atk;
+    public void setBaseATK(BaseATK baseATK) {
+        this.baseATK = baseATK;
     }
 
-    public DEF getDef() {
-        return def;
+    public BaseDEF getBaseDEF() {
+        return baseDEF;
     }
 
-    public void setDef(DEF def) {
-        this.def = def;
+    public void setBaseDEF(BaseDEF baseDEF) {
+        this.baseDEF = baseDEF;
     }
 
     public ElementalMastery getElementalMastery() {

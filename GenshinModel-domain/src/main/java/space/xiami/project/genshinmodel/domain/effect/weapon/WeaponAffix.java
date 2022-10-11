@@ -1,10 +1,8 @@
 package space.xiami.project.genshinmodel.domain.effect.weapon;
 
 import space.xiami.project.genshinmodel.domain.effect.AbstractAffix;
-import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Xiami

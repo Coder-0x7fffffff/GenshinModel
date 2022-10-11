@@ -1,5 +1,7 @@
 package space.xiami.project.genshinmodel.executor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshinmodel.domain.context.Context;
 import space.xiami.project.genshinmodel.domain.effect.Effect;
@@ -15,20 +17,21 @@ import java.util.List;
 @Component
 public class DefaultEffectExecutor implements EffectExecutor{
 
+    private final Logger log = LoggerFactory.getLogger(DefaultEffectExecutor.class);
+
     @Override
-    public <Result> Result execute(List<Effect> effects, Context<Result> context, EffectMethodEnum effectMethodEnum) {
+    public <Result> void execute(List<Effect> effects, Context<Result> context, EffectMethodEnum effectMethodEnum) {
         List<Effect> orderedEffects = context.getEffectInvokeOrder(effects);
         Method method = effectMethodEnum.getMethod();
         if(method == null){
-            return null;
+            return;
         }
         for(Effect effect : orderedEffects){
             try {
                 method.invoke(effect, context);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                log.error("Execute error", e);
             }
         }
-        return context.buildResult();
     }
 }

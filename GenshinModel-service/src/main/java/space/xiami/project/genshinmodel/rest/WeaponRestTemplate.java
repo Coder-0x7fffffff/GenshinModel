@@ -20,7 +20,7 @@ public class WeaponRestTemplate {
     private static final Logger log = LoggerFactory.getLogger(WeaponRestTemplate.class);
 
     private static final String GET_BY_ID = "weapon/get_by_id";
-    private static final String GET_BY_NAME = "weapon/get_by_id";
+    private static final String GET_BY_NAME = "weapon/get_by_name";
     private static final String LIST = "weapon/list";
 
     @Resource

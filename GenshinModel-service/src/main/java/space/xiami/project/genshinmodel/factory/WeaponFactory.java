@@ -8,10 +8,8 @@ import space.xiami.project.genshinmodel.domain.effect.weapon.WeaponEffect;
 import space.xiami.project.genshinmodel.domain.entry.bonus.AbstractBonus;
 import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 import space.xiami.project.genshinmodel.rest.WeaponRestTemplate;
-import space.xiami.project.genshinmodel.util.converter.AffixConverter;
-import space.xiami.project.genshinmodel.util.converter.EffectConverter;
-import space.xiami.project.genshinmodel.util.converter.EquipPropTypeConverter;
-import space.xiami.project.genshinmodel.util.converter.WeaponTypeConverter;
+import space.xiami.project.genshinmodel.util.ConfigUtil;
+import space.xiami.project.genshinmodel.util.converter.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -56,12 +54,20 @@ public class WeaponFactory {
                     if(property.getPropType() == null || property.getValue() == null){
                         return;
                     }
-                    bonusList.add(
-                            EquipPropTypeConverter.property2Bonus(
-                                    property.getPropType(),
-                                    property.getValue()
-                            )
+                    AbstractBonus bonus = EquipPropTypeConverter.property2Bonus(
+                            property.getPropType(),
+                            property.getValue()
                     );
+                    if(bonus != null){
+                        if(ConfigUtil.getConfig().getAvatarBonusToAttribute().contains(bonus.getName())){
+                            to.setMainAttribute(AttributeLevelPropTypeConverter.property2Bonus(
+                                    property.getPropType(),
+                                    property.getValue())
+                            );
+                        }else{
+                            bonusList.add(bonus);
+                        }
+                    }
                 });
                 break;
             }
@@ -72,7 +78,7 @@ public class WeaponFactory {
         for(space.xiami.project.genshindataviewer.domain.model.Weapon.WeaponEquipAffix weaponEquipAffix : from.getWeaponEquipAffixes()){
             if(weaponEquipAffix.getRefinementRank().equals(refinementRank)){
                 weaponEquipAffix.getEquipAffix().forEach(equipAffix -> {
-                    WeaponAffix convertedAffix = AffixConverter.convertEquipAffix(equipAffix);
+                    WeaponAffix convertedAffix = AffixConverter.convertWeaponEquipAffix(equipAffix);
                     WeaponEffect weaponEffect = EffectConverter.toWeaponEffect(to, convertedAffix);
                     effects.add(weaponEffect);
                 });

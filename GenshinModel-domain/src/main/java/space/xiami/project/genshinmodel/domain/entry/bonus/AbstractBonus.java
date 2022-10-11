@@ -5,5 +5,5 @@ import space.xiami.project.genshinmodel.domain.entry.AbstractEntry;
 /**
  * @author Xiami
  */
-public class AbstractBonus extends AbstractEntry {
+public abstract class AbstractBonus extends AbstractEntry {
 }

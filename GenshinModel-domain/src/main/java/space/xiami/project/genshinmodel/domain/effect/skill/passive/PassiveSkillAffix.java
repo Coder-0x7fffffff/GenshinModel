@@ -8,7 +8,12 @@ import space.xiami.project.genshinmodel.domain.effect.skill.AbstractSkillAffix;
 public class PassiveSkillAffix extends AbstractSkillAffix {
 
     /**
-     * 被动的id
+     * 被动的唯一id
+     */
+    private Long proudSkillId;
+
+    /**
+     * 被动的分组id
      */
     private Long proudSkillGroupId;
 
@@ -16,6 +21,14 @@ public class PassiveSkillAffix extends AbstractSkillAffix {
      * 需要的人物突破等级
      */
     private Integer needAvatarPromoteLevel;
+
+    public Long getProudSkillId() {
+        return proudSkillId;
+    }
+
+    public void setProudSkillId(Long proudSkillId) {
+        this.proudSkillId = proudSkillId;
+    }
 
     public Long getProudSkillGroupId() {
         return proudSkillGroupId;

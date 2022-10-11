@@ -1,6 +1,5 @@
 package space.xiami.project.genshinmodel.factory;
 
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,7 @@
 package space.xiami.project.genshinmodel.domain.effect;
 
 import space.xiami.project.genshinmodel.domain.context.CalculateAttributeContext;
+import space.xiami.project.genshinmodel.domain.equipment.Equipment;
 
 import java.util.List;
 
@@ -9,9 +10,11 @@ import java.util.List;
  */
 public interface Effect {
 
-    List<Affix> getAffixes();
+    Equipment getParent();
 
-    void setAffixes(List<Affix> affixes);
+    Affix getAffix();
+
+    String uniqueKey();
 
     default void onCalculateAttribute(CalculateAttributeContext context) {}
 }
