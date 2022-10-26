@@ -28,7 +28,7 @@ public class Avatar {
     private String name;
 
     /**
-     * TODO 元素种类
+     * 元素种类, 角色的元素类型，也有可能用于查询相关的角色
      * @see space.xiami.project.genshincommon.enums.ElementalTypeEnum
      */
     private Byte elementalType;

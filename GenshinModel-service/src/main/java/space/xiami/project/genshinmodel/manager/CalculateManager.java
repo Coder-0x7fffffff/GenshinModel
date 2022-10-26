@@ -41,6 +41,8 @@ public class CalculateManager {
     public CalculateAttributeResult calculateAttribute(CalculateAttributeContext context) {
         // 计算基础属性
         calculateBaseAttribute(context);
+        // 获取队伍buff
+        // TODO 调用 avatarFactory的matchTeamResonance
         // 计算加成
         calculateBonus(context);
         // 执行所有effect

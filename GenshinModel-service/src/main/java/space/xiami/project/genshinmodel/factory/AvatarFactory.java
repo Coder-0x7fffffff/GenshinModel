@@ -1,9 +1,15 @@
 package space.xiami.project.genshinmodel.factory;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshincommon.NumberRange;
 import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
+import space.xiami.project.genshindataviewer.domain.model.TeamResonance;
+import space.xiami.project.genshindataviewer.domain.model.TeamResonanceGroup;
 import space.xiami.project.genshinmodel.domain.avatar.Avatar;
+import space.xiami.project.genshinmodel.domain.effect.resonance.TeamResonanceAffix;
+import space.xiami.project.genshinmodel.domain.effect.resonance.TeamResonanceEffect;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillEffect;
 import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkillAffix;
@@ -27,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Xiami
@@ -37,12 +44,12 @@ public class AvatarFactory {
     @Resource
     private AvatarRestTemplate avatarRestTemplate;
 
-    public Avatar getByName(String name, String level, Map<String, Integer> skillLevel, Integer talentLevel){
-        return convertAvatar(avatarRestTemplate.getByName(name), level, skillLevel, talentLevel);
+    public Avatar getByName(String name, Byte elementalType, String level, Map<String, Integer> skillLevel, Integer talentLevel){
+        return convertAvatar(avatarRestTemplate.getByName(name, elementalType), level, skillLevel, talentLevel);
     }
 
-    public Avatar getById(Long id, String level, Map<String, Integer> skillLevel, Integer talentLevel){
-        return convertAvatar(avatarRestTemplate.getById(id), level, skillLevel, talentLevel);
+    public Avatar getById(Long id, Byte elementalType, String level, Map<String, Integer> skillLevel, Integer talentLevel){
+        return convertAvatar(avatarRestTemplate.getById(id, elementalType), level, skillLevel, talentLevel);
     }
 
     public Map<String, NumberRange<Integer>> getSkillLevelRangeByName(String name){
@@ -53,11 +60,45 @@ public class AvatarFactory {
         return avatarRestTemplate.getSkillLevelRangeById(id);
     }
 
+    public List<TeamResonanceEffect> matchTeamResonance(Map<Long, Byte> id2appoint){
+        List<String> idAppointList = new ArrayList<>(id2appoint.size());
+        id2appoint.forEach((id, elemType) -> {
+            idAppointList.add(id + (elemType != null ? ("@"+ elemType) : ""));
+        });
+        TeamResonanceGroup teamResonanceGroup = avatarRestTemplate.matchTeamResonance(StringUtils.join(idAppointList, '~'));
+        List<TeamResonanceEffect> effects = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(teamResonanceGroup.getTeamResonances())){
+            List<TeamResonance> teamResonances = teamResonanceGroup.getTeamResonances();
+            teamResonances.forEach(teamResonance -> {
+                TeamResonanceAffix affix = AffixConverter.convertTeamResonanceAffix(teamResonance);
+                TeamResonanceEffect effect = EffectConverter.toTeamResonanceEffect(affix);
+                effects.add(effect);
+            });
+        }
+        return effects;
+    }
+
+    private static Byte getAvatarElementalType(space.xiami.project.genshindataviewer.domain.model.Avatar avatar){
+        Byte elementalType = null;
+        if(CollectionUtils.isNotEmpty(avatar.getSkillActive().values())){
+            for(List<space.xiami.project.genshindataviewer.domain.model.Avatar.ActiveSkill> activeSkills : avatar.getSkillActive().values()) {
+                if(CollectionUtils.isNotEmpty(activeSkills)){
+                    for(space.xiami.project.genshindataviewer.domain.model.Avatar.ActiveSkill activeSkill : activeSkills) {
+                        if(activeSkill.getCostElemType() != null){
+                            elementalType = ElementalTypeConverter.string2Byte(activeSkill.getCostElemType());
+                        }
+                    }
+                }
+            }
+        }
+        return elementalType;
+    }
+
     private static Avatar convertAvatar(space.xiami.project.genshindataviewer.domain.model.Avatar from, String level, Map<String, Integer> skillLevelMap, Integer talentLevel){
         Avatar to = new Avatar();
         to.setId(from.getId());
         to.setName(from.getName());
-        // to.setElementalType();
+        to.setElementalType(getAvatarElementalType(from));
         to.setWeaponType(WeaponTypeConverter.string2Byte(from.getWeaponType()));
         to.setLevel(level);
         // activeSkill + passiveSkill + talent

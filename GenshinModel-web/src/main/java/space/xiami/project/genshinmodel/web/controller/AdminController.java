@@ -79,7 +79,9 @@ public class AdminController {
 
     private static String reliquaryTypeFile = "reliquaryType.json";
 
-    @RequestMapping("/refreshConfig")
+    private static String elementalTypeFile = "elementalType.json";
+
+    @RequestMapping(value = "/refreshConfig", produces = "text/html;charset=UTF-8")
     public String refreshConfig(
             String pw,
             @RequestParam(name = "type", defaultValue = "all") String type
@@ -92,6 +94,7 @@ public class AdminController {
         Map<String, Set<String>> equipPropType = new HashMap<>();
         Map<String, Set<String>> weaponType = new HashMap<>();
         Map<String, Set<String>> reliquaryType = new HashMap<>();
+        Map<String, Set<String>> elementalType = new HashMap<>();
         LanguageEnum[] langValue = LanguageEnum.values();
         // Weapon
         if(type.equals("all") || type.equals("weapon")){
@@ -195,9 +198,9 @@ public class AdminController {
             Collection avatarIds = avatarRestTemplate.list(LanguageEnum.EN.getCode()).values();
             avatarIds.forEach(id -> {
                 long start = System.currentTimeMillis();
-                Avatar avatar = avatarRestTemplate.getById(Long.valueOf((Integer) id), LanguageEnum.EN.getCode());
+                Avatar avatar = avatarRestTemplate.getById(Long.valueOf((Integer) id), null, LanguageEnum.EN.getCode());
                 for(LanguageEnum language : langValue){
-                    Avatar langAvatar = avatarRestTemplate.getById(avatar.getId(), language.getCode());
+                    Avatar langAvatar = avatarRestTemplate.getById(avatar.getId(), null, language.getCode());
                     // avatarProperty
                     int avatarPropLen = avatar.getAvatarProperties().size();
                     for(int idx = 0; idx<avatarPropLen; idx++){
@@ -211,6 +214,21 @@ public class AdminController {
                                     .add(val);
                             attributeLevelPropType.computeIfAbsent(key, v -> new HashSet<>())
                                     .add(val);
+                        }
+                    }
+                    // active skill
+                    int skillDepotLen = avatar.getSkillActive().size();
+                    for(int idx = 0; idx<skillDepotLen; idx++){
+                        List<Avatar.ActiveSkill> activeSkills = avatar.getSkillActive().values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+                        List<Avatar.ActiveSkill> langActiveSkills = langAvatar.getSkillActive().values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+                        int activeSkillLen = activeSkills.size();
+                        for(int idx2 = 0; idx2 < activeSkillLen; idx2++){
+                            String key = activeSkills.get(idx2).getCostElemType();
+                            String val = langActiveSkills.get(idx2).getCostElemType();
+                            if(key != null && val != null){
+                                elementalType.computeIfAbsent(key, v -> new HashSet<>())
+                                        .add(val);
+                            }
                         }
                     }
                     // talent
@@ -240,6 +258,7 @@ public class AdminController {
         Set<String> equipPropTypeValueSet = new HashSet<>();
         Set<String> weaponTypeValueSet = new HashSet<>();
         Set<String> reliquaryTypeValueSet = new HashSet<>();
+        Set<String> elementalTypeValueSet = new HashSet<>();
         attributeLevelPropType.values().forEach(set -> {
             set.forEach(value -> {
                 if(attributeLevelPropTypeValueSet.contains(value)){
@@ -272,6 +291,14 @@ public class AdminController {
                 reliquaryTypeValueSet.add(value);
             });
         });
+        elementalType.values().forEach(set -> {
+            set.forEach(value -> {
+                if(elementalTypeValueSet.contains(value)){
+                    log.warn("repeat value: {}", value);
+                }
+                elementalTypeValueSet.add(value);
+            });
+        });
         // write
         try{
             ConfigUtil.refresh();
@@ -291,6 +318,10 @@ public class AdminController {
             FileUtil.writeFile(PathUtil.getConfigDirectory() + reliquaryTypeFile,
                     JSON.toJSONString(reliquaryType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
             ReliquaryTypeConverter.refresh();
+            // elementalType
+            FileUtil.writeFile(PathUtil.getConfigDirectory() + elementalTypeFile,
+                    JSON.toJSONString(elementalType, SerializerFeature.PrettyFormat).getBytes(StandardCharsets.UTF_8));
+            ReliquaryTypeConverter.refresh();
         }catch (Exception e){
             log.error("error", e);
         }
@@ -308,15 +339,15 @@ public class AdminController {
     }
 
     @RequestMapping("/getAvatarById")
-    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(Long id, String level, Integer talentLevel, String skillLevel){
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarById(Long id, Byte elementalType, String level, Integer talentLevel, String skillLevel){
         Map<String, NumberRange<Integer>> skillLevelRange = avatarFactory.getSkillLevelRangeById(id);
-        return avatarFactory.getById(id, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
+        return avatarFactory.getById(id, elementalType, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
     }
 
     @RequestMapping("/getAvatarByName")
-    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarByName(String name, String level, Integer talentLevel, String skillLevel){
+    public space.xiami.project.genshinmodel.domain.avatar.Avatar getAvatarByName(String name, Byte elementalType, String level, Integer talentLevel, String skillLevel){
         Map<String, NumberRange<Integer>> skillLevelRange = avatarFactory.getSkillLevelRangeByName(name);
-        return avatarFactory.getByName(name, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
+        return avatarFactory.getByName(name, elementalType, level, fillSkillLevelMap(skillLevel, skillLevelRange), talentLevel);
     }
 
     @RequestMapping("/getAvatarSkillLevelRangeById")
@@ -370,6 +401,7 @@ public class AdminController {
         });
         space.xiami.project.genshinmodel.domain.avatar.Avatar avatar0 = avatarFactory.getByName(
                 "坎蒂丝",
+                null,
                 "20",
                 skillLevel,
                 0
