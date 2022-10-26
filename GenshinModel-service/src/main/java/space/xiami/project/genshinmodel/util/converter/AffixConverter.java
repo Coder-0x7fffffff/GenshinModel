@@ -3,7 +3,9 @@ package space.xiami.project.genshinmodel.util.converter;
 import space.xiami.project.genshindataviewer.domain.model.AddProperty;
 import space.xiami.project.genshindataviewer.domain.model.Avatar;
 import space.xiami.project.genshindataviewer.domain.model.EquipAffix;
+import space.xiami.project.genshindataviewer.domain.model.TeamResonance;
 import space.xiami.project.genshinmodel.domain.effect.reliquaries.ReliquarySetAffix;
+import space.xiami.project.genshinmodel.domain.effect.resonance.TeamResonanceAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.SkillProperty;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkillAffix;
@@ -18,6 +20,24 @@ import java.util.List;
  * @author Xiami
  */
 public class AffixConverter {
+
+    public static TeamResonanceAffix convertTeamResonanceAffix(TeamResonance from){
+        if(from == null){
+            return null;
+        }
+        TeamResonanceAffix to = new TeamResonanceAffix();
+        to.setTeamResonanceId(from.getTeamResonanceId());
+        to.setTeamResonanceGroupId(from.getTeamResonanceGroupId());
+        to.setLevel(from.getLevel());
+        to.setElementAvatarLimit(from.getElementAvatarLimit());
+        to.setAllDifferent(from.getAllDifferent());
+        to.setOpenConfig(from.getOpenConfig());
+        to.setParamList(from.getParamList());
+        to.setName(from.getName());
+        to.setDesc(from.getDesc());
+        to.setBonuses(convertBonus(from.getAddProperties()));
+        return to;
+    }
 
     public static WeaponAffix convertWeaponEquipAffix(EquipAffix from){
         if(from == null){
@@ -111,13 +131,15 @@ public class AffixConverter {
 
     private static SkillProperty convertSkillProperty(Avatar.Skill from, Integer level) {
         SkillProperty skillProperty = new SkillProperty();
-        from.getSkillProperties().forEach(sp -> {
-            if(sp.getLevel() != null && sp.getLevel().equals(level)){
-                skillProperty.setLevel(sp.getLevel());
-                skillProperty.setParamDescValueMap(sp.getParamDescValueMap());
-                skillProperty.setParams(sp.getParams());
-            }
-        });
+        if(from.getSkillProperties() != null){
+            from.getSkillProperties().forEach(sp -> {
+                if(sp.getLevel() != null && sp.getLevel().equals(level)){
+                    skillProperty.setLevel(sp.getLevel());
+                    skillProperty.setParamDescValueMap(sp.getParamDescValueMap());
+                    skillProperty.setParams(sp.getParams());
+                }
+            });
+        }
         return skillProperty;
     }
 }

@@ -23,8 +23,6 @@ public class ReliquaryTypeConverter {
     private static Logger log = LoggerFactory.getLogger(ReliquaryTypeConverter.class);
 
     private static final Map<String, ReliquaryTypeEnum> veMap = new HashMap<>();
-    private static final Map<ReliquaryTypeEnum, String> evMap = new HashMap<>();
-    private static final Map<Byte, String> bvMap = new HashMap<>();
 
     private static String reliquaryTypeFile = "reliquaryType.json";
 
@@ -34,8 +32,6 @@ public class ReliquaryTypeConverter {
 
     public static void refresh(){
         veMap.clear();
-        evMap.clear();
-        bvMap.clear();
         File file = new File(PathUtil.getConfigDirectory() + reliquaryTypeFile);
         try {
             if(file.exists()){
@@ -55,28 +51,14 @@ public class ReliquaryTypeConverter {
         }catch (Exception e){
             log.error("init error", e);
         }
-
-        veMap.forEach((k, v) -> {
-            evMap.put(v, k);
-            bvMap.put(v.getCode(), k);
-        });
     }
 
     public static ReliquaryTypeEnum string2Enum(String v){
         return veMap.get(v);
     }
 
-    public static String enum2String(ReliquaryTypeEnum e){
-        return evMap.get(e);
-    }
-
     public static Byte string2Byte(String v){
         ReliquaryTypeEnum e = veMap.get(v);
         return e != null ? e.getCode() : null;
     }
-
-    public static String byte2String(Byte v){
-        return bvMap.get(v);
-    }
-
 }

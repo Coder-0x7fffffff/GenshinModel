@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.xiami.project.genshinmodel.domain.effect.reliquaries.ReliquarySetAffix;
 import space.xiami.project.genshinmodel.domain.effect.reliquaries.ReliquarySetEffect;
+import space.xiami.project.genshinmodel.domain.effect.resonance.TeamResonanceAffix;
+import space.xiami.project.genshinmodel.domain.effect.resonance.TeamResonanceEffect;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillAffix;
 import space.xiami.project.genshinmodel.domain.effect.skill.active.ActiveSkillEffect;
 import space.xiami.project.genshinmodel.domain.effect.skill.passive.PassiveSkillAffix;
@@ -24,6 +26,11 @@ import space.xiami.project.genshinmodel.domain.equipment.weapon.Weapon;
 public class EffectConverter {
 
     private static Logger log = LoggerFactory.getLogger(EffectConverter.class);
+
+    public static TeamResonanceEffect toTeamResonanceEffect(TeamResonanceAffix teamResonanceAffix){
+        // TODO 为每一个共鸣提供一个不同的TeamResonanceEffect
+        return new TeamResonanceEffect(teamResonanceAffix);
+    }
 
     public static WeaponEffect toWeaponEffect(Weapon weapon, WeaponAffix weaponAffix) {
         // TODO 为每一个武器提供不同的WeaponEffect

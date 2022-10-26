@@ -22,7 +22,7 @@ public abstract class AbstractEffect implements Effect{
         this.uniqueKey = String.join(
                 "@",
                 getClass().getSimpleName(),
-                parent.getClass().getSimpleName(),
+                parent != null ? parent.getClass().getSimpleName() : "null",
                 this.affix.getClass().getSimpleName()
         );
     }
